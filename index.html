@@ -11,29 +11,36 @@
         
         body { background: #0f172a; color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
         
-        /* Pengaturan Halaman Utama */
         .page {
             background: white; width: 210mm; min-height: 297mm;
-            padding: 20mm 25mm; margin: 20px auto; color: black;
-            font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.6;
+            padding: 20mm 20mm; margin: 20px auto; color: black;
+            font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.5;
             box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative;
             box-sizing: border-box; overflow: hidden;
         }
 
         .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; }
         
-        /* Style Daftar Isi */
-        .toc-list { list-style: none; padding: 0; margin-top: 20px; }
-        .toc-item { display: flex; align-items: baseline; margin-bottom: 10px; }
-        .toc-title { order: 1; }
-        .toc-filler { order: 2; flex-grow: 1; border-bottom: 1px dotted black; margin: 0 5px; }
-        .toc-page { order: 3; min-width: 20px; text-align: right; }
-        .indent-1 { padding-left: 25px; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9pt; table-layout: fixed; }
-        th, td { border: 1px solid black; padding: 8px; vertical-align: top; word-wrap: break-word; }
+        /* Pengaturan Tabel - Optimasi Kolom */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 8.5pt; table-layout: fixed; }
+        th, td { 
+            border: 1px solid black; 
+            padding: 6px 4px; 
+            vertical-align: top; 
+            word-wrap: break-word; 
+            overflow-wrap: break-word; 
+        }
         th { background-color: #f3f4f6; font-weight: bold; text-align: center; text-transform: uppercase; }
 
+        /* Style Daftar Isi */
+        .toc-list { list-style: none; padding: 0; width: 100%; }
+        .toc-item { display: flex; align-items: flex-end; margin-bottom: 8px; width: 100%; }
+        .toc-title { flex-shrink: 0; padding-right: 5px; background: white; position: relative; z-index: 1; }
+        .toc-filler { flex-grow: 1; border-bottom: 1px dotted black; margin-bottom: 5px; min-width: 10px; }
+        .toc-page { flex-shrink: 0; padding-left: 5px; background: white; position: relative; z-index: 1; min-width: 25px; text-align: right; }
+        .indent-1 { padding-left: 25px; }
+
+        /* UI Controls */
         .no-print-area { background: #1e293b; border-radius: 15px; padding: 25px; margin-bottom: 30px; border: 1px solid #334155; }
         .input-card { background: #334155; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #475569; transition: 0.3s; }
         .input-card.active { border-left-color: #10b981; background: #1e293b; }
@@ -44,7 +51,6 @@
 
         .sig-container { display: inline-block; min-width: 250px; text-align: center; }
 
-        /* === PRINT OPTIMIZATION === */
         @media print {
             @page { size: A4; margin: 0; }
             .no-print { display: none !important; }
@@ -52,27 +58,11 @@
             .page { margin: 0; box-shadow: none; width: 210mm; height: 297mm; page-break-after: always; }
         }
 
-        /* === RESPONSIVE PREVIEW (SCREEN) === */
-        /* Perbaikan: Menyelaraskan kontainer preview agar sejajar dengan kontainer input */
-        .report-container { 
-            width: 100%; 
-            max-width: 80rem; /* max-w-7xl */
-            margin: 0 auto;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 0 1rem;
-        }
+        .report-container { width: 100%; max-width: 80rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding: 0 1rem; }
 
-        @media screen and (max-width: 1024px) {
-            .page { transform: scale(0.85); transform-origin: top center; margin-bottom: -50px; }
-        }
-        @media screen and (max-width: 768px) {
-            .page { transform: scale(0.65); transform-origin: top center; margin-bottom: -120px; }
-        }
-        @media screen and (max-width: 640px) {
-            .page { transform: scale(0.42); transform-origin: top center; margin-bottom: -180px; }
-        }
+        @media screen and (max-width: 1024px) { .page { transform: scale(0.85); transform-origin: top center; margin-bottom: -50px; } }
+        @media screen and (max-width: 768px) { .page { transform: scale(0.65); transform-origin: top center; margin-bottom: -120px; } }
+        @media screen and (max-width: 640px) { .page { transform: scale(0.42); transform-origin: top center; margin-bottom: -180px; } }
     </style>
 </head>
 <body>
@@ -80,29 +70,40 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> PPL REPORT GENERATOR - 16 POIN LENGKAP
+            <i class="fa-solid fa-file-invoice"></i> PPL REPORT GENERATOR - 16 POIN IKI
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-            <div class="lg:col-span-1">
-                <label class="text-xs font-bold text-slate-400 uppercase">Data Penyuluh</label>
+            <div class="lg:col-span-1 flex flex-col gap-3"> 
+                <label class="text-xs font-bold text-slate-400 uppercase mb-1">Data Penyuluh</label>
                 <input type="text" id="in_nama" oninput="sync()" placeholder="Nama Lengkap">
                 <input type="text" id="in_nip" oninput="sync()" placeholder="NIP">
-                <input type="text" id="in_jabatan" oninput="sync()" placeholder="Jabatan">
-                <input type="text" id="in_wkpp" oninput="sync()" placeholder="Nama WKPP">
+                <input type="text" id="in_jabatan" oninput="sync()" placeholder="Jabatan: Cth. Penyuluh Ahli Pertama">
+                <input type="text" id="in_wkpp" oninput="sync()" placeholder="Nama : Cth. Desa Manurung">
                 <input type="text" id="in_kab" oninput="sync()" placeholder="Kabupaten">
-                <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan / Lokasi TTD">
+                <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan/Lokasi TTD: Cth. Kecamatan Bola">
                 <select id="in_bulan" onchange="sync()">
                     <option value="JANUARI">Januari</option>
                     <option value="FEBRUARI">Februari</option>
                     <option value="MARET">Maret</option>
                     <option value="APRIL">April</option>
+                    <option value="MEI">Mei</option>
+                    <option value="JUNI">Juni</option>
+                    <option value="JULI">Juli</option>
+                    <option value="AGUSTUS">Agustus</option>
+                    <option value="SEPTEMBER">September</option>
+                    <option value="OKTOBER">Oktober</option>
+                    <option value="NOVEMBER">November</option>
+                    <option value="DESEMBER">Desember</option>
                 </select>
-                <button onclick="generateAI()" id="btn-ai" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold text-white shadow-lg transition transform hover:scale-105">
-                    🚀 GENERATE NARASI LAPORAN
+                <label class="text-xs font-bold text-slate-400 uppercase -mb-2">Tanggal Laporan (TTD)</label>
+                <input type="date" id="in_tanggal" oninput="sync()">
+                
+                <button onclick="generateAI()" id="btn-ai" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold text-white shadow-lg transition transform hover:scale-105">
+                    🚀 GENERATE AI - NARASI LAPORAN
                 </button>
-                <button onclick="window.print()" class="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl font-bold transition text-white">
-                    <i class="fa-solid fa-print mr-2"></i> CETAK LAPORAN
+                <button onclick="window.print()" class="w-full bg-emerald-600 hover:bg-emerald-700 py-3 rounded-xl font-bold transition text-white">
+                    <i class="fa-solid fa-print mr-2"></i> CETAK/SIMPAN LAPORAN
                 </button>
             </div>
 
@@ -133,8 +134,7 @@
                 <div class="grid grid-cols-3"><span>BPP WILAYAH</span><span class="col-span-2">: <span id="out_bpp_cover">-</span></span></div>
             </div>
         </div>
-        <div class="font-bold mt-10"><p>KEMENTERIAN PERTANIAN</p><p>BPPSDMP - PUSAT PENYULUHAN PERTANIAN</p><p class="mt-4">2026</p></div>
-        <div class="page-number"></div>
+        <div class="font-bold mt-10"><p>KEMENTERIAN PERTANIAN</p><p>BADAN PENYULUHAN DAN PENGEMBANGAN SDM PERTANIAN</p><p>PUSAT PENYULUHAN PERTANIAN</p><p class="mt-4">2026</p></div>
     </div>
 
     <div class="page">
@@ -142,7 +142,7 @@
         <div id="out_kp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Klik Generate...</div>
         <div class="mt-16 flex justify-end">
             <div class="sig-container">
-                <span id="out_lokasi_tgl1">..., 31 Januari 2026</span><br>Penyusun,
+                <span id="out_lokasi_tgl1">..., ...</span><br>Penyusun,
                 <div class="h-24"></div>
                 <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig1"></p>
             </div>
@@ -153,39 +153,19 @@
     <div class="page">
         <h2 class="text-center font-bold text-lg mb-10">DAFTAR ISI</h2>
         <div class="toc-list">
-            <div class="toc-item">
-                <span class="toc-title">HALAMAN JUDUL</span><span class="toc-filler"></span><span class="toc-page"></span>
-            </div>
-            <div class="toc-item">
-                <span class="toc-title">KATA PENGANTAR</span><span class="toc-filler"></span><span class="toc-page">i</span>
-            </div>
-            <div class="toc-item font-bold italic">
-                <span class="toc-title">DAFTAR ISI</span><span class="toc-filler"></span><span class="toc-page">ii</span>
-            </div>
+            <div class="toc-item"><span class="toc-title">HALAMAN JUDUL</span><span class="toc-filler"></span><span class="toc-page"></span></div>
+            <div class="toc-item"><span class="toc-title">KATA PENGANTAR</span><span class="toc-filler"></span><span class="toc-page">i</span></div>
+            <div class="toc-item font-bold italic"><span class="toc-title">DAFTAR ISI</span><span class="toc-filler"></span><span class="toc-page">ii</span></div>
             <br>
-            <div class="toc-item font-bold">
-                <span class="toc-title">BAB I. PENDAHULUAN</span><span class="toc-filler"></span><span class="toc-page">1</span>
-            </div>
-            <div class="toc-item indent-1">
-                <span class="toc-title">1.1. Latar Belakang</span><span class="toc-filler"></span><span class="toc-page">1</span>
-            </div>
-            <div class="toc-item indent-1">
-                <span class="toc-title">1.2. Tugas Pokok Penyuluh Pertanian</span><span class="toc-filler"></span><span class="toc-page">1</span>
-            </div>
-            <div class="toc-item indent-1">
-                <span class="toc-title">1.3. Tujuan Pelaporan</span><span class="toc-filler"></span><span class="toc-page">1</span>
-            </div>
+            <div class="toc-item font-bold"><span class="toc-title">BAB I. PENDAHULUAN</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
+            <div class="toc-item indent-1"><span class="toc-title">1.1. Latar Belakang</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
+            <div class="toc-item indent-1"><span class="toc-title">1.2. Tugas Pokok Penyuluh Pertanian</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
+            <div class="toc-item indent-1"><span class="toc-title">1.3. Tujuan Pelaporan</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
             <br>
-            <div class="toc-item font-bold">
-                <span class="toc-title">BAB II. PEMBAHASAN</span><span class="toc-filler"></span><span class="toc-page">2</span>
-            </div>
-            <div class="toc-item indent-1">
-                <span class="toc-title">Rincian Capaian Kinerja Dan Kendala</span><span class="toc-filler"></span><span class="toc-page">2</span>
-            </div>
+            <div class="toc-item font-bold"><span class="toc-title">BAB II. PEMBAHASAN</span><span class="toc-filler"></span><span class="toc-page">2</span></div>
+            <div class="toc-item indent-1"><span class="toc-title">Rincian Capaian Kinerja Dan Kendala</span><span class="toc-filler"></span><span class="toc-page">2</span></div>
             <br>
-            <div class="toc-item font-bold">
-                <span class="toc-title">BAB III. KESIMPULAN</span><span class="toc-filler"></span><span class="toc-page">3</span>
-            </div>
+            <div class="toc-item font-bold"><span class="toc-title">BAB III. KESIMPULAN</span><span class="toc-filler"></span><span class="toc-page">3</span></div>
         </div>
         <div class="page-number">ii</div>
     </div>
@@ -207,11 +187,11 @@
         <table>
             <thead>
                 <tr>
-                    <th width="5%">No</th>
-                    <th width="20%">Komponen Kegiatan</th>
-                    <th width="45%">Rincian Capaian & Eviden</th>
-                    <th width="15%">Kendala</th>
-                    <th width="15%">Tindaklanjut</th>
+                    <th style="width: 35px;">No</th>
+                    <th style="width: 20%;">Komponen Kegiatan</th>
+                    <th style="width: 37%;">Rincian Capaian & Eviden</th>
+                    <th style="width: 19%;">Kendala</th>
+                    <th style="width: 19%;">Tindak Lanjut</th>
                 </tr>
             </thead>
             <tbody id="out_table_body"></tbody>
@@ -226,7 +206,7 @@
         </div>
         <div class="flex justify-end">
             <div class="sig-container">
-                <span id="out_lokasi_tgl2">..., 31 Januari 2026</span><br>Penyuluh Pertanian,
+                <span id="out_lokasi_tgl2">..., ...</span><br>Penyuluh Pertanian,
                 <div class="h-28"></div>
                 <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig2"></p><br>
                 NIP. <span id="out_nip_sig2">-</span>
@@ -256,8 +236,15 @@
         "Jumlah Laporan Data Statistik Perkebunan"
     ];
 
+    function formatTanggalIndo(dateString) {
+        if (!dateString) return "...";
+        const date = new Date(dateString);
+        return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
     function init() {
         const cont = document.getElementById('input_container');
+        cont.innerHTML = "";
         daftarKomponen.forEach((k, i) => {
             const no = i + 1;
             cont.innerHTML += `
@@ -268,11 +255,12 @@
                     </div>
                     <div id="box_${no}" class="hidden-input space-y-2">
                         <textarea id="key_${no}" placeholder="Detail aktivitas..."></textarea>
-                        <textarea id="ken_${no}" placeholder="KENDALA MANUAL DI SINI..." class="bg-red-900/20 border-red-500/50"></textarea>
-                        <input type="text" id="ev_${no}" class="text-xs" placeholder="Link Eviden">
+                        <textarea id="ken_${no}" placeholder="Tulis kendala (Wajib manual)..." class="bg-red-900/20 border-red-500/50"></textarea>
+                        <input type="text" id="ev_${no}" class="text-xs" placeholder="Link G-Drive Eviden">
                     </div>
                 </div>`;
         });
+        document.getElementById('in_tanggal').value = new Date().toISOString().split('T')[0];
         sync();
     }
 
@@ -298,6 +286,7 @@
     function sync() {
         const val = (id) => document.getElementById(id).value;
         const n = val('in_nama'); const nip = val('in_nip'); const b = val('in_bpp'); const bl = val('in_bulan');
+        
         document.getElementById('out_nama_cover').innerText = n;
         document.getElementById('out_nip_cover').innerText = nip;
         document.getElementById('out_jabatan_cover').innerText = val('in_jabatan').toUpperCase();
@@ -308,9 +297,10 @@
         document.getElementById('out_nama_sig2').innerText = n;
         document.getElementById('out_nip_sig2').innerText = nip;
         document.getElementById('out_bulan_2').innerText = bl;
-        const tgl = `31 ${bl.toLowerCase()} 2026`;
-        document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tgl}`;
-        document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tgl}`;
+
+        const tglTeks = formatTanggalIndo(val('in_tanggal'));
+        document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tglTeks}`;
+        document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tglTeks}`;
     }
 
     async function generateAI() {
@@ -332,7 +322,6 @@
         });
 
         if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
-        
         btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing..."; 
         btn.disabled = true;
 
@@ -340,28 +329,19 @@
             const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
 
             Aturan:
-            1. 'kp' (Kata Pengantar) wajib 3 paragraf.
-            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal.
-            3. 'items' berisi rincian kegiatan, kendala, dan tindak lanjut profesional.
+            1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
+            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis .
+            3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
             4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
 
-            Output JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+            Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+
 
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
-                headers: { 
-                    "Content-Type": "application/json", 
-                    "Authorization": `Bearer ${apiKey}` 
-                },
-                body: JSON.stringify({ 
-                    model: "llama-3.3-70b-versatile", 
-                    messages: [{ role: "user", content: prompt }], 
-                    response_format: { type: "json_object" }
-                })
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" } })
             });
-
-            if (!res.ok) throw new Error("Gagal menghubungi server AI");
-
             const data = await res.json();
             const obj = JSON.parse(data.choices[0].message.content);
 
@@ -375,21 +355,14 @@
                 const rCell = document.getElementById(`r_${item.no}`);
                 const orig = sel.find(s => s.no == item.no);
                 if(rCell) {
-                    rCell.innerHTML = `<b>${item.rincian}</b>` + (orig.link ? `<br><br><i class="text-blue-600">Eviden: ${orig.link}</i>` : "");
+                    rCell.innerHTML = `<div><b>${item.rincian}</b></div>${orig.link ? `<div style="font-size:7pt; color:blue; margin-top:5px; border-top: 0.5px solid #eee;">Eviden: ${orig.link}</div>` : ""}`;
                     document.getElementById(`k_${item.no}`).innerText = orig.user_kendala || item.kendala;
                     document.getElementById(`t_${item.no}`).innerText = item.tindak;
                 }
             });
-
             document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
-            
-        } catch (e) { 
-            console.error(e);
-            alert("Error AI: " + e.message); 
-        } finally { 
-            btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; 
-            btn.disabled = false; 
-        }
+        } catch (e) { alert("Error: " + e.message); } 
+        finally { btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; btn.disabled = false; }
     }
     window.onload = init;
 </script>

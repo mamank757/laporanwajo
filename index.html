@@ -301,12 +301,15 @@
         btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing..."; btn.disabled = true;
 
         try {
-            const prompt = `Anda PPL Pertanian. Buat laporan formal. Data: ${JSON.stringify(sel)}. Jika ada 'user_kendala', tampilkan itu. Buatkan 'tindak_lanjut' profesional berdasarkan kendala tersebut. Output JSON: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
-            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" }})
-            });
+           const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
+
+Aturan:
+1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
+2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis.
+3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
+4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
+
+Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
             const data = await res.json();
             const obj = JSON.parse(data.choices[0].message.content);
 

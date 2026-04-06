@@ -31,6 +31,9 @@
         input, select { width: 100%; background: #0f172a; border: 1px solid #475569; color: white; padding: 8px; border-radius: 6px; margin-top: 8px; }
         .hidden-input { display: none; }
 
+        /* Container Tanda Tangan agar lebar menyesuaikan teks */
+        .sig-container { display: inline-block; min-width: 250px; text-align: center; }
+
         @media print {
             .no-print { display: none !important; }
             body { background: white; padding: 0; }
@@ -64,9 +67,10 @@
                 <label class="text-xs font-bold text-slate-400 uppercase">Data Penyuluh</label>
                 <input type="text" id="in_nama" oninput="sync()" placeholder="Nama Lengkap">
                 <input type="text" id="in_nip" oninput="sync()" placeholder="NIP">
-                <input type="text" id="in_jabatan" oninput="sync()" placeholder="Jabatan (cth: PENYULUH PERTANIAN AHLI MUDA)">
+                <input type="text" id="in_jabatan" oninput="sync()" placeholder="Jabatan">
+                <input type="text" id="in_wkpp" oninput="sync()" placeholder="Nama WKPP (Wilayah Kerja)">
                 <input type="text" id="in_kab" oninput="sync()" placeholder="Kabupaten">
-                <input type="text" id="in_bpp" oninput="sync()" placeholder="Wilayah BPP/Kecamatan">
+                <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan / Lokasi TTD">
                 <select id="in_bulan" onchange="sync()">
                     <option value="JANUARI">Januari</option>
                     <option value="FEBRUARI">Februari</option>
@@ -101,7 +105,6 @@
                 <h3 class="font-bold text-xl" id="out_bulan_cover">BULAN JANUARI</h3>
                 <p class="text-lg" id="out_jabatan_cover">PENYULUH PERTANIAN</p>
             </div>
-            
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Kementerian_Pertanian_Republik_Indonesia.svg/3840px-Logo_Kementerian_Pertanian_Republik_Indonesia.svg.png" alt="Logo Kementan" class="w-48 h-auto mx-auto my-6">
         </div>
 
@@ -127,10 +130,10 @@
         <h2 class="text-center font-bold text-lg mb-10">KATA PENGANTAR</h2>
         <div id="out_kp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Klik Generate untuk menyusun narasi Kata Pengantar (3 Paragraf)...</div>
         <div class="mt-16 flex justify-end">
-            <div class="text-center w-72">
+            <div class="sig-container">
                 <span id="out_lokasi_tgl1">..., 31 Januari 2026</span><br>Penyusun,
                 <div class="h-24"></div>
-                <p class="font-bold underline uppercase" id="out_nama_sig1"></p>
+                <p class="font-bold underline uppercase inline-block border-b border-black leading-none" id="out_nama_sig1"></p>
             </div>
         </div>
         <div class="page-number">ii</div>
@@ -171,10 +174,10 @@
             <div id="out_kesimp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Menunggu AI menyusun narasi Kesimpulan (3 Paragraf)...</div>
         </div>
         <div class="flex justify-end mt-16">
-            <div class="text-center w-80">
+            <div class="sig-container">
                 <span id="out_lokasi_tgl2">..., 31 Januari 2026</span><br>Penyuluh Pertanian,
                 <div class="h-28"></div>
-                <p class="font-bold underline uppercase" id="out_nama_sig2"></p>
+                <p class="font-bold underline uppercase inline-block border-b border-black leading-none" id="out_nama_sig2"></p><br>
                 NIP. <span id="out_nip_sig2">-</span>
             </div>
         </div>
@@ -241,25 +244,25 @@
         const n = val('in_nama') || 'NAMA PENYULUH';
         const nip = val('in_nip') || '-';
         const jab = val('in_jabatan') || 'PENYULUH PERTANIAN';
+        const wkpp = val('in_wkpp') || '-';
         const b = val('in_bpp') || '-';
         const bl = val('in_bulan');
         
-        // Sync ke Halaman Sampul (Tetap Uppercase untuk Formalitas Sampul)
+        // Sync ke Halaman Sampul
         document.getElementById('out_nama_cover').innerText = n;
         document.getElementById('out_nip_cover').innerText = nip;
         document.getElementById('out_jabatan_cover').innerText = jab.toUpperCase();
         document.getElementById('out_bpp_cover').innerText = b.toUpperCase();
-        document.getElementById('out_wkpp_cover').innerText = '-'; // Bisa ditambah input jika perlu
+        document.getElementById('out_wkpp_cover').innerText = wkpp.toUpperCase();
         document.getElementById('out_bulan_cover').innerText = `BULAN ${bl}`;
         
-        // Sync ke Halaman Lain (Sesuai inputan, tidak dipaksa Uppercase)
+        // Sync ke Halaman Lain
         document.getElementById('out_nama_sig1').innerText = n;
         document.getElementById('out_nama_sig2').innerText = n;
         document.getElementById('out_nip_sig2').innerText = nip;
         document.getElementById('out_bulan_2').innerText = bl;
         
         const tgl = `31 ${bl.charAt(0)}${bl.slice(1).toLowerCase()} 2026`;
-        // Teks lokasi mengikuti inputan user
         document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tgl}`;
         document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tgl}`;
     }
@@ -283,7 +286,6 @@
 
         try {
             const prompt = `Anda adalah Penyuluh Pertanian di Kecamatan ${bpp}, Kabupaten ${kab}. Susun laporan kinerja bulan ${bulan} dengan struktur berikut (Gunakan Bahasa Indonesia Formal): 1. KATA PENGANTAR (3 Paragraf), 2. BAB I (Latar Belakang, Tugas Pokok, Tujuan), 3. BAB II (Pembahasan), 4. BAB III (Kesimpulan). FORMAT OUTPUT JSON: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":nomor, "rincian":"", "kendala":"", "tindak":""}]}`;
-
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
@@ -293,7 +295,6 @@
                     response_format: { type: "json_object" }
                 })
             });
-
             const data = await res.json();
             const obj = JSON.parse(data.choices[0].message.content);
 

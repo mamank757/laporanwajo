@@ -38,38 +38,52 @@
             body { background: white; padding: 0; }
             .page { margin: 0; box-shadow: none; width: 210mm; }
         }
-        /* === RESPONSIVE PDF PREVIEW === */
+        /* === RESPONSIVE PDF PREVIEW (AUTO SCALE - LEBIH HALUS) === */
 .report-container {
     width: 100%;
     overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Default (laptop) */
+/* Base page tetap A4 */
 .page {
     transform-origin: top center;
+}
+
+/* Wrapper scaling biar tidak pakai margin negatif */
+@media screen {
+    .page {
+        zoom: 0.9;
+    }
 }
 
 /* Laptop kecil */
 @media (max-width: 1280px) {
     .page {
-        transform: scale(0.85);
-        margin: -40px auto;
+        zoom: 0.75;
     }
 }
 
 /* Tablet */
 @media (max-width: 1024px) {
     .page {
-        transform: scale(0.7);
-        margin: -80px auto;
+        zoom: 0.6;
     }
 }
 
 /* HP */
 @media (max-width: 640px) {
     .page {
-        transform: scale(0.5);
-        margin: -120px auto;
+        zoom: 0.45;
+    }
+}
+
+/* Pastikan print tetap normal */
+@media print {
+    .page {
+        zoom: 1 !important;
     }
 }
     </style>

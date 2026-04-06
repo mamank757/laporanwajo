@@ -22,7 +22,7 @@
         .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; }
         
         /* Pengaturan Tabel - Optimasi Kolom */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 8.5pt; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 7pt; table-layout: fixed; }
         th, td { 
             border: 1px solid black; 
             padding: 6px 4px; 
@@ -131,7 +131,7 @@
             <h1 class="text-2xl font-bold mb-2">LAPORAN KINERJA INDIVIDU</h1>
             <h2 class="text-lg font-bold px-10 leading-snug">Pelaksanaan Tugas Pendampingan Program Utama <br> Kementerian Pertanian</h2>
         </div>
-        <div class="w-full space-y-6 uppercase">
+        <div class="w-full space-y-6">
             <h3 class="font-bold text-xl" id="out_bulan_cover">BULAN JANUARI</h3>
             <p class="text-lg" id="out_jabatan_cover">PENYULUH PERTANIAN</p>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Kementerian_Pertanian_Republik_Indonesia.svg/3840px-Logo_Kementerian_Pertanian_Republik_Indonesia.svg.png" class="w-48 mx-auto my-6">
@@ -294,25 +294,38 @@
     }
 
     function sync() {
-        const val = (id) => document.getElementById(id).value;
-        const n = val('in_nama'); const nip = val('in_nip'); const b = val('in_bpp'); const bl = val('in_bulan');
-        
-        document.getElementById('out_nama_cover').innerText = n;
-        document.getElementById('out_nip_cover').innerText = nip;
-        document.getElementById('out_jabatan_cover').innerText = val('in_jabatan').toUpperCase();
-        document.getElementById('out_wkpp_cover').innerText = val('in_wkpp').toUpperCase();
-        document.getElementById('out_bpp_cover').innerText = b.toUpperCase();
-        document.getElementById('out_bulan_cover').innerText = `BULAN ${bl}`;
-        document.getElementById('out_nama_sig1').innerText = n;
-        document.getElementById('out_nama_sig2').innerText = n;
-        document.getElementById('out_nip_sig2').innerText = nip;
-        document.getElementById('out_bulan_2').innerText = bl;
+    const val = (id) => document.getElementById(id).value;
+    
+    // Ambil nilai dasar
+    const n = val('in_nama'); 
+    const nip = val('in_nip'); 
+    const b = val('in_bpp'); 
+    let blRaw = val('in_bulan'); // Ini yang "JANUARI"
+    
+    // Proses mengubah "JANUARI" -> "Januari"
+    const blRapi = blRaw.charAt(0).toUpperCase() + blRaw.slice(1).toLowerCase();
 
-        const tglTeks = formatTanggalIndo(val('in_tanggal'));
-        document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tglTeks}`;
-        document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tglTeks}`;
-    }
+    // 1. Update Cover (Tetap UPPERCASE untuk estetika judul)
+    document.getElementById('out_nama_cover').innerText = n;
+    document.getElementById('out_nip_cover').innerText = nip;
+    document.getElementById('out_jabatan_cover').innerText = val('in_jabatan').toUpperCase();
+    document.getElementById('out_wkpp_cover').innerText = val('in_wkpp').toUpperCase();
+    document.getElementById('out_bpp_cover').innerText = b.toUpperCase();
+    document.getElementById('out_bulan_cover').innerText = `BULAN ${blRaw}`; // Tetap JANUARI
+    
+    // 2. Update Tanda Tangan
+    document.getElementById('out_nama_sig1').innerText = n;
+    document.getElementById('out_nama_sig2').innerText = n;
+    document.getElementById('out_nip_sig2').innerText = nip;
+    
+    // 3. Update BAB II Pembahasan (Sekarang jadi "Januari")
+    document.getElementById('out_bulan_2').innerText = blRapi; 
 
+    // 4. Update Lokasi & Tanggal TTD
+    const tglTeks = formatTanggalIndo(val('in_tanggal'));
+    document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tglTeks}`;
+    document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tglTeks}`;
+}
     async function generateAI() {
         const apiKey = "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"; 
         const btn = document.getElementById('btn-ai');
@@ -346,7 +359,7 @@ Aturan Penulisan:
 1. Bahasa: Gunakan Bahasa Indonesia formal, teknis, dan objektif.
 2. 'kp' (Kata Pengantar): Wajib 3 paragraf (Pembuka, isi ringkas, penutup/harapan).
 3. 'latar', 'tugas', 'tujuan': Harus mencerminkan tupoksi PPL dan kondisi pertanian wilayah setempat.
-4. 'items': Iterasi seluruh data. 'rincian' maksimal 3 kalimat efektif. Jika 'user_kendala' kosong/null, buat kendala teknis lapangan yang relevan secara logis. 'tindak' harus berupa solusi profesional.
+4. 'items': Iterasi seluruh data. 'rincian' maksimal 2 kalimat efektif. Jika 'user_kendala' kosong/null, buat kendala teknis lapangan yang relevan secara logis. 'tindak' harus berupa solusi profesional.
 5. 'kesimp' (Kesimpulan): Wajib 3 paragraf (Pencapaian, evaluasi kendala, dan rekomendasi ke depan).
 
 PENTING: Output wajib JSON murni tanpa teks pengantar apapun di luar bracket:

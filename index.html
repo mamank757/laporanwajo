@@ -287,32 +287,59 @@
     }
 
     async function generateAI() {
-        const apiKey = "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";
+        const apiKey = "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"; // Pastikan API Key valid
         const btn = document.getElementById('btn-ai');
         let sel = [];
+        
         daftarKomponen.forEach((k, i) => {
             const no = i + 1;
             if(document.getElementById(`chk_${no}`).checked) {
-                sel.push({ no, nama: k, detail: document.getElementById(`key_${no}`).value, user_kendala: document.getElementById(`ken_${no}`).value, link: document.getElementById(`ev_${no}`).value });
+                sel.push({ 
+                    no, 
+                    nama: k, 
+                    detail: document.getElementById(`key_${no}`).value, 
+                    user_kendala: document.getElementById(`ken_${no}`).value, 
+                    link: document.getElementById(`ev_${no}`).value 
+                });
             }
         });
 
-        if(sel.length === 0) return alert("Pilih kegiatan!");
-        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing..."; btn.disabled = true;
+        if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
+        
+        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing..."; 
+        btn.disabled = true;
 
         try {
-           const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
+            const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
 
-Aturan:
-1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
-2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis.
-3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
-4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
+            Aturan:
+            1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
+            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis.
+            3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
+            4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
 
-Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+            Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+
+            // BARIS INI YANG SEBELUMNYA HILANG/ERROR:
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer ${apiKey}` 
+                },
+                body: JSON.stringify({ 
+                    model: "llama-3.3-70b-versatile", 
+                    messages: [{ role: "user", content: prompt }], 
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            if (!res.ok) throw new Error("Gagal menghubungi server AI");
+
             const data = await res.json();
             const obj = JSON.parse(data.choices[0].message.content);
 
+            // Update konten halaman
             document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
             document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
             document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
@@ -328,9 +355,17 @@ Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp"
                     document.getElementById(`t_${item.no}`).innerText = item.tindak;
                 }
             });
+
+            // Hilangkan style placeholder
             document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
-        } catch (e) { alert("Error AI."); }
-        finally { btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; btn.disabled = false; }
+            
+        } catch (e) { 
+            console.error(e);
+            alert("Error AI: " + e.message); 
+        } finally { 
+            btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; 
+            btn.disabled = false; 
+        }
     }
     window.onload = init;
 </script>

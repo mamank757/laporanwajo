@@ -31,8 +31,13 @@
         input, select { width: 100%; background: #0f172a; border: 1px solid #475569; color: white; padding: 8px; border-radius: 6px; margin-top: 8px; }
         .hidden-input { display: none; }
 
-        /* Container Tanda Tangan agar lebar menyesuaikan teks */
         .sig-container { display: inline-block; min-width: 250px; text-align: center; }
+        
+        /* Style khusus Daftar Isi */
+        .toc-row { display: flex; justify-content: flex-end; align-items: baseline; margin-bottom: 8px; }
+        .toc-title { flex-grow: 1; position: relative; overflow: hidden; }
+        .toc-title::after { content: " .........................................................................................................................................."; position: absolute; padding-left: 5px; }
+        .toc-page { min-width: 20px; text-align: right; font-weight: bold; }
 
         @media print {
             .no-print { display: none !important; }
@@ -99,7 +104,6 @@
             <h1 class="text-2xl font-bold mb-2">LAPORAN KINERJA INDIVIDU</h1>
             <h2 class="text-lg font-bold px-10 leading-snug">Pelaksanaan Tugas Pendampingan Program Utama <br> Kementerian Pertanian</h2>
         </div>
-
         <div class="w-full space-y-6">
             <div class="uppercase">
                 <h3 class="font-bold text-xl" id="out_bulan_cover">BULAN JANUARI</h3>
@@ -107,7 +111,6 @@
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Kementerian_Pertanian_Republik_Indonesia.svg/3840px-Logo_Kementerian_Pertanian_Republik_Indonesia.svg.png" alt="Logo Kementan" class="w-48 h-auto mx-auto my-6">
         </div>
-
         <div class="w-full uppercase">
             <div class="max-w-md mx-auto text-left pl-6 py-4 space-y-2">
                 <div class="grid grid-cols-3"><span>NAMA</span><span class="col-span-2">: <b id="out_nama_cover">-</b></span></div>
@@ -116,14 +119,13 @@
                 <div class="grid grid-cols-3"><span>BPP WILAYAH</span><span class="col-span-2">: <span id="out_bpp_cover">-</span></span></div>
             </div>
         </div>
-
         <div class="font-bold mt-10">
             <p>KEMENTERIAN PERTANIAN</p>
             <p>BADAN PENYULUHAN DAN PENGEMBANGAN SDM PERTANIAN</p>
             <p>PUSAT PENYULUHAN PERTANIAN</p>
             <p class="mt-4">2026</p>
         </div>
-        <div class="page-number">i</div>
+        <div class="page-number"></div>
     </div>
 
     <div class="page">
@@ -136,13 +138,31 @@
                 <p class="font-bold underline uppercase inline-block border-b border-black leading-none" id="out_nama_sig1"></p>
             </div>
         </div>
-        <div class="page-number">ii</div>
+        <div class="page-number">i</div>
+    </div>
+
+    <div class="page">
+        <h2 class="text-center font-bold text-lg mb-10">DAFTAR ISI</h2>
+        <div class="space-y-4 px-4">
+            <div class="toc-row"><div class="toc-title">KATA PENGANTAR</div><div class="toc-page">ii</div></div>
+            <div class="toc-row"><div class="toc-title">DAFTAR ISI</div><div class="toc-page">ii</div></div>
+            <div class="toc-row font-bold"><div class="toc-title">BAB I. PENDAHULUAN</div><div class="toc-page">1</div></div>
+            <div class="pl-6 space-y-2">
+                <div class="toc-row"><div class="toc-title">1.1. Latar Belakang</div><div class="toc-page">1</div></div>
+                <div class="toc-row"><div class="toc-title">1.2. Tugas Pokok Penyuluh Pertanian</div><div class="toc-page">1</div></div>
+                <div class="toc-row"><div class="toc-title">1.3. Tujuan Pelaporan</div><div class="toc-page">1</div></div>
+            </div>
+            <div class="toc-row font-bold"><div class="toc-title">BAB II. PEMBAHASAN</div><div class="toc-page">2</div></div>
+            <div class="toc-row font-bold"><div class="toc-title">BAB III. KESIMPULAN</div><div class="toc-page">3</div></div>
+            <div class="toc-row font-bold"><div class="toc-title">LAMPIRAN</div><div class="toc-page">4</div></div>
+        </div>
+        <div class="page-number">iii</div>
     </div>
 
     <div class="page">
         <h2 class="font-bold text-lg mb-6 uppercase text-center">BAB I. PENDAHULUAN</h2>
         <h3 class="font-bold mb-2">1.1. Latar Belakang</h3>
-        <div id="out_latar" class="text-justify mb-6 leading-relaxed italic text-gray-400">Menunggu AI menyusun narasi Latar Belakang (3-4 Paragraf)...</div>
+        <div id="out_latar" class="text-justify mb-6 leading-relaxed italic text-gray-400">Menunggu AI menyusun narasi Latar Belakang...</div>
         <h3 class="font-bold mb-2">1.2. Tugas Pokok Penyuluh Pertanian</h3>
         <div id="out_tugas_pokok" class="text-justify mb-6 leading-relaxed italic text-gray-400">Menunggu narasi Tugas Pokok...</div>
         <h3 class="font-bold mb-2">1.3. Tujuan Pelaporan</h3>
@@ -158,9 +178,9 @@
                 <tr>
                     <th width="5%">No</th>
                     <th width="25%">Komponen Kegiatan</th>
-                    <th width="45%">Rincian Capaian Kinerja & Eviden</th>
-                    <th width="12%">Kendala</th>
-                    <th width="13%">Tindaklanjut</th>
+                    <th width="40%">Rincian Capaian Kinerja & Eviden</th>
+                    <th width="15%">Kendala</th>
+                    <th width="15%">Tindaklanjut</th>
                 </tr>
             </thead>
             <tbody id="out_table_body"></tbody>
@@ -171,7 +191,7 @@
     <div class="page flex flex-col justify-between">
         <div>
             <h2 class="font-bold text-lg mb-6 uppercase text-center">BAB III. KESIMPULAN</h2>
-            <div id="out_kesimp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Menunggu AI menyusun narasi Kesimpulan (3 Paragraf)...</div>
+            <div id="out_kesimp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Menunggu AI menyusun narasi Kesimpulan...</div>
         </div>
         <div class="flex justify-end mt-16">
             <div class="sig-container">
@@ -214,6 +234,7 @@
                     </div>
                     <div id="box_${no}" class="hidden-input space-y-2">
                         <textarea id="key_${no}" placeholder="Detail aktivitas (Contoh: Monitoring Poktan X, Luas 5Ha, dll)"></textarea>
+                        <textarea id="kendala_${no}" placeholder="Tulis kendala lapangan di sini (Manual)" class="bg-red-900/20 border-red-500/50 text-red-100 text-xs"></textarea>
                         <input type="text" id="eviden_${no}" class="bg-emerald-900/50 border-emerald-500 text-emerald-200 text-xs" placeholder="Link Google Drive Foto/Laporan">
                     </div>
                 </div>`;
@@ -248,7 +269,6 @@
         const b = val('in_bpp') || '-';
         const bl = val('in_bulan');
         
-        // Sync ke Halaman Sampul
         document.getElementById('out_nama_cover').innerText = n;
         document.getElementById('out_nip_cover').innerText = nip;
         document.getElementById('out_jabatan_cover').innerText = jab.toUpperCase();
@@ -256,7 +276,6 @@
         document.getElementById('out_wkpp_cover').innerText = wkpp.toUpperCase();
         document.getElementById('out_bulan_cover').innerText = `BULAN ${bl}`;
         
-        // Sync ke Halaman Lain
         document.getElementById('out_nama_sig1').innerText = n;
         document.getElementById('out_nama_sig2').innerText = n;
         document.getElementById('out_nip_sig2').innerText = nip;
@@ -277,7 +296,13 @@
         let sel = [];
         daftarKomponen.forEach((k, i) => {
             if(document.getElementById(`chk_${i+1}`).checked) {
-                sel.push({ no: i+1, nama: k, detail: document.getElementById(`key_${i+1}`).value, link: document.getElementById(`eviden_${i+1}`).value });
+                sel.push({ 
+                    no: i+1, 
+                    nama: k, 
+                    detail: document.getElementById(`key_${i+1}`).value, 
+                    kendala_user: document.getElementById(`kendala_${i+1}`).value,
+                    link: document.getElementById(`eviden_${i+1}`).value 
+                });
             }
         });
 
@@ -285,7 +310,8 @@
         btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyusun Laporan..."; btn.disabled = true;
 
         try {
-            const prompt = `Anda adalah Penyuluh Pertanian di Kecamatan ${bpp}, Kabupaten ${kab}. Susun laporan kinerja bulan ${bulan} dengan struktur berikut (Gunakan Bahasa Indonesia Formal): 1. KATA PENGANTAR (3 Paragraf), 2. BAB I (Latar Belakang, Tugas Pokok, Tujuan), 3. BAB II (Pembahasan), 4. BAB III (Kesimpulan). FORMAT OUTPUT JSON: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":nomor, "rincian":"", "kendala":"", "tindak":""}]}`;
+            const prompt = `Anda adalah Penyuluh Pertanian di Kecamatan ${bpp}, Kabupaten ${kab}. Susun narasi laporan kinerja bulan ${bulan}. Untuk tabel Pembahasan, perhatikan "kendala_user" yang saya berikan. Jika "kendala_user" tidak kosong, pindahkan teks tersebut ke kolom kendala dan buatkan "tindak_lanjut" yang sesuai secara teknis pertanian. Data Kegiatan: ${JSON.stringify(sel)}. FORMAT OUTPUT JSON: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":nomor, "rincian":"", "kendala":"", "tindak":""}]}`;
+            
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },

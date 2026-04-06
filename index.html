@@ -76,12 +76,22 @@
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             <div class="lg:col-span-1 flex flex-col gap-3"> 
                 <label class="text-xs font-bold text-slate-400 uppercase mb-1">Data Penyuluh</label>
-                <input type="text" id="in_nama" oninput="sync()" placeholder="Nama Lengkap">
+                <input type="text" id="in_nama" oninput="sync()" placeholder="Abdul Rahman, SP">
                 <input type="text" id="in_nip" oninput="sync()" placeholder="NIP">
-                <input type="text" id="in_jabatan" oninput="sync()" placeholder="Jabatan: Cth. Penyuluh Ahli Pertama">
-                <input type="text" id="in_wkpp" oninput="sync()" placeholder="Nama : Cth. Desa Manurung">
+                <select id="in_jabatan" onchange="sync()">
+                    <option value="">-- Pilih Jabatan --</option>
+                        <option value="Penyuluh Pertanian Pemula">Penyuluh Pertanian Pemula</option>
+                        <option value="Penyuluh Pertanian Terampil">Penyuluh Pertanian Terampil</option>
+                        <option value="Penyuluh Pertanian Mahir">Penyuluh Pertanian Mahir</option>
+                        <option value="Penyuluh Pertanian Penyelia">Penyuluh Pertanian Penyelia</option>
+                        <option value="Penyuluh Pertanian Ahli Pertama">Penyuluh Pertanian Ahli Pertama</option>
+                        <option value="Penyuluh Pertanian Ahli Muda">Penyuluh Pertanian Ahli Muda</option>
+                        <option value="Penyuluh Pertanian Ahli Madya">Penyuluh Pertanian Ahli Madya</option>
+                        <option value="Penyuluh Pertanian Ahli Utama">Penyuluh Pertanian Ahli Utama</option>
+                    </select>
+                <input type="text" id="in_wkpp" oninput="sync()" placeholder="WKPP: Cth. Desa Manurung">
                 <input type="text" id="in_kab" oninput="sync()" placeholder="Kabupaten">
-                <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan/Lokasi TTD: Cth. Kecamatan Bola">
+                <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan/Lokasi TTD: Cth. Bola">
                 <select id="in_bulan" onchange="sync()">
                     <option value="JANUARI">Januari</option>
                     <option value="FEBRUARI">Februari</option>
@@ -254,8 +264,8 @@
                         <label for="chk_${no}" class="font-bold text-sm text-slate-200 cursor-pointer">${no}. ${k}</label>
                     </div>
                     <div id="box_${no}" class="hidden-input space-y-2">
-                        <textarea id="key_${no}" placeholder="Detail aktivitas..."></textarea>
-                        <textarea id="ken_${no}" placeholder="Tulis kendala (Wajib manual)..." class="bg-red-900/20 border-red-500/50"></textarea>
+                        <textarea id="key_${no}" placeholder="Detail aktivitas, objek/komoditi diperjelas: Cth. Monitoring luas tambah tanam padi Poktan Sukamaju"></textarea>
+                        <textarea id="ken_${no}" placeholder="Tulis kendala (Wajib manual): Cth. Curah hujan yang sangat rendah, serangan hama tikus yang masif" class="bg-red-900/20 border-red-500/50"></textarea>
                         <input type="text" id="ev_${no}" class="text-xs" placeholder="Link G-Drive Eviden">
                     </div>
                 </div>`;
@@ -326,15 +336,21 @@
         btn.disabled = true;
 
         try {
-            const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
+            const prompt = `Anda adalah PPL Pertanian Profesional. Tugas Anda: Menyusun laporan bulanan formal standar Kementerian Pertanian. 
 
-            Aturan:
-            1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
-            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis .
-            3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
-            4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
+Data Utama: ${JSON.stringify(sel)}
+Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}.
+Periode: ${document.getElementById('in_bulan').value} 2026.
 
-            Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+Aturan Penulisan:
+1. Bahasa: Gunakan Bahasa Indonesia formal, teknis, dan objektif.
+2. 'kp' (Kata Pengantar): Wajib 3 paragraf (Pembuka, isi ringkas, penutup/harapan).
+3. 'latar', 'tugas', 'tujuan': Harus mencerminkan tupoksi PPL dan kondisi pertanian wilayah setempat.
+4. 'items': Iterasi seluruh data. 'rincian' maksimal 3 kalimat efektif. Jika 'user_kendala' kosong/null, buat kendala teknis lapangan yang relevan secara logis. 'tindak' harus berupa solusi profesional.
+5. 'kesimp' (Kesimpulan): Wajib 3 paragraf (Pencapaian, evaluasi kendala, dan rekomendasi ke depan).
+
+PENTING: Output wajib JSON murni tanpa teks pengantar apapun di luar bracket:
+{"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":1, "rincian":"", "kendala":"", "tindak":""}]}`;
 
 
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {

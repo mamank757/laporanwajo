@@ -8,17 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { background: #0f172a; color: #f1f5f9; font-family: 'Inter', sans-serif; }
         
+        body { background: #0f172a; color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        
+        /* Pengaturan Halaman Utama */
         .page {
             background: white; width: 210mm; min-height: 297mm;
             padding: 20mm 25mm; margin: 20px auto; color: black;
             font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.6;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5); page-break-after: always; position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative;
+            box-sizing: border-box; overflow: hidden;
         }
 
         .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; }
         
+        /* Style Daftar Isi */
+        .toc-list { list-style: none; padding: 0; margin-top: 20px; }
+        .toc-item { display: flex; align-items: baseline; margin-bottom: 10px; }
+        .toc-title { order: 1; }
+        .toc-filler { order: 2; flex-grow: 1; border-bottom: 1px dotted black; margin: 0 5px; }
+        .toc-page { order: 3; min-width: 20px; text-align: right; }
+        .indent-1 { padding-left: 25px; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9pt; table-layout: fixed; }
         th, td { border: 1px solid black; padding: 8px; vertical-align: top; word-wrap: break-word; }
         th { background-color: #f3f4f6; font-weight: bold; text-align: center; text-transform: uppercase; }
@@ -33,59 +44,23 @@
 
         .sig-container { display: inline-block; min-width: 250px; text-align: center; }
 
+        /* === PRINT OPTIMIZATION === */
         @media print {
+            @page { size: A4; margin: 0; }
             .no-print { display: none !important; }
             body { background: white; padding: 0; }
-            .page { margin: 0; box-shadow: none; width: 210mm; }
+            .page { margin: 0; box-shadow: none; width: 210mm; height: 297mm; page-break-after: always; }
         }
-        /* === RESPONSIVE PDF PREVIEW (AUTO SCALE - LEBIH HALUS) === */
-.report-container {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-/* Base page tetap A4 */
-.page {
-    transform-origin: top center;
-}
+        /* === RESPONSIVE PREVIEW (SCREEN) === */
+        .report-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
 
-/* Wrapper scaling biar tidak pakai margin negatif */
-@media screen {
-    .page {
-        zoom: 0.9;
-    }
-}
-
-/* Laptop kecil */
-@media (max-width: 1280px) {
-    .page {
-        zoom: 0.75;
-    }
-}
-
-/* Tablet */
-@media (max-width: 1024px) {
-    .page {
-        zoom: 0.6;
-    }
-}
-
-/* HP */
-@media (max-width: 640px) {
-    .page {
-        zoom: 0.45;
-    }
-}
-
-/* Pastikan print tetap normal */
-@media print {
-    .page {
-        zoom: 1 !important;
-    }
-}
+        @media screen and (max-width: 1024px) {
+            .page { transform: scale(0.7); transform-origin: top center; margin-bottom: -100px; }
+        }
+        @media screen and (max-width: 640px) {
+            .page { transform: scale(0.42); transform-origin: top center; margin-bottom: -180px; }
+        }
     </style>
 </head>
 <body>
@@ -147,7 +122,7 @@
             </div>
         </div>
         <div class="font-bold mt-10"><p>KEMENTERIAN PERTANIAN</p><p>BPPSDMP - PUSAT PENYULUHAN PERTANIAN</p><p class="mt-4">2026</p></div>
-        <div class="page-number">i</div>
+        <div class="page-number"></div>
     </div>
 
     <div class="page">
@@ -160,7 +135,47 @@
                 <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig1"></p>
             </div>
         </div>
-        <div class="page-number">ii</div>
+        <div class="page-number">i</div>
+    </div>
+
+    <div class="page">
+        <h2 class="text-center font-bold text-lg mb-10">DAFTAR ISI</h2>
+        <div class="toc-list">
+            <div class="toc-item">
+                <span class="toc-title">HALAMAN JUDUL</span><span class="toc-filler"></span><span class="toc-page"></span>
+            </div>
+            <div class="toc-item">
+                <span class="toc-title">KATA PENGANTAR</span><span class="toc-filler"></span><span class="toc-page">i</span>
+            </div>
+            <div class="toc-item font-bold italic">
+                <span class="toc-title">DAFTAR ISI</span><span class="toc-filler"></span><span class="toc-page">ii</span>
+            </div>
+            <br>
+            <div class="toc-item font-bold">
+                <span class="toc-title">BAB I. PENDAHULUAN</span><span class="toc-filler"></span><span class="toc-page">1</span>
+            </div>
+            <div class="toc-item indent-1">
+                <span class="toc-title">1.1. Latar Belakang</span><span class="toc-filler"></span><span class="toc-page">1</span>
+            </div>
+            <div class="toc-item indent-1">
+                <span class="toc-title">1.2. Tugas Pokok Penyuluh Pertanian</span><span class="toc-filler"></span><span class="toc-page">1</span>
+            </div>
+            <div class="toc-item indent-1">
+                <span class="toc-title">1.3. Tujuan Pelaporan</span><span class="toc-filler"></span><span class="toc-page">1</span>
+            </div>
+            <br>
+            <div class="toc-item font-bold">
+                <span class="toc-title">BAB II. PEMBAHASAN</span><span class="toc-filler"></span><span class="toc-page">2</span>
+            </div>
+            <div class="toc-item indent-1">
+                <span class="toc-title">Rincian Capaian Kinerja Dan Kendala</span><span class="toc-filler"></span><span class="toc-page">2</span>
+            </div>
+            <br>
+            <div class="toc-item font-bold">
+                <span class="toc-title">BAB III. KESIMPULAN</span><span class="toc-filler"></span><span class="toc-page">3</span>
+            </div>
+        </div>
+        <div class="page-number">iii</div>
     </div>
 
     <div class="page">
@@ -287,7 +302,7 @@
     }
 
     async function generateAI() {
-        const apiKey = "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"; // Pastikan API Key valid
+        const apiKey = "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"; 
         const btn = document.getElementById('btn-ai');
         let sel = [];
         
@@ -313,14 +328,13 @@
             const prompt = `Anda PPL Pertanian profesional. Buat laporan formal sesuai standar Kementan. Data: ${JSON.stringify(sel)}. Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}. Bulan: ${document.getElementById('in_bulan').value} 2026. 
 
             Aturan:
-            1. 'kp' (Kata Pengantar) wajib 3 paragraf sesuai instruksi.
-            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal & teknis.
-            3. 'items' berisi rincian kegiatan (maks 3 kalimat), kendala (utamakan user_kendala), dan tindak lanjut profesional.
+            1. 'kp' (Kata Pengantar) wajib 3 paragraf.
+            2. 'latar', 'tugas', 'tujuan' (Pendahulan) harus formal.
+            3. 'items' berisi rincian kegiatan, kendala, dan tindak lanjut profesional.
             4. 'kesimp' (Kesimpulan) wajib 3 paragraf.
 
-            Output harus JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
+            Output JSON murni: {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":x, "rincian":"", "kendala":"", "tindak":""}]}`;
 
-            // BARIS INI YANG SEBELUMNYA HILANG/ERROR:
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
                 headers: { 
@@ -339,7 +353,6 @@
             const data = await res.json();
             const obj = JSON.parse(data.choices[0].message.content);
 
-            // Update konten halaman
             document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
             document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
             document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
@@ -356,7 +369,6 @@
                 }
             });
 
-            // Hilangkan style placeholder
             document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
             
         } catch (e) { 

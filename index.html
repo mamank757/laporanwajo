@@ -53,10 +53,22 @@
         }
 
         /* === RESPONSIVE PREVIEW (SCREEN) === */
-        .report-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        /* Perbaikan: Menyelaraskan kontainer preview agar sejajar dengan kontainer input */
+        .report-container { 
+            width: 100%; 
+            max-width: 80rem; /* max-w-7xl */
+            margin: 0 auto;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 0 1rem;
+        }
 
         @media screen and (max-width: 1024px) {
-            .page { transform: scale(0.7); transform-origin: top center; margin-bottom: -100px; }
+            .page { transform: scale(0.85); transform-origin: top center; margin-bottom: -50px; }
+        }
+        @media screen and (max-width: 768px) {
+            .page { transform: scale(0.65); transform-origin: top center; margin-bottom: -120px; }
         }
         @media screen and (max-width: 640px) {
             .page { transform: scale(0.42); transform-origin: top center; margin-bottom: -180px; }
@@ -175,7 +187,7 @@
                 <span class="toc-title">BAB III. KESIMPULAN</span><span class="toc-filler"></span><span class="toc-page">3</span>
             </div>
         </div>
-        <div class="page-number">iii</div>
+        <div class="page-number">ii</div>
     </div>
 
     <div class="page">

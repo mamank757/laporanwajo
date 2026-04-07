@@ -390,6 +390,7 @@ PENTING: Output wajib JSON murni tanpa teks pengantar apapun di luar bracket:
                 }
             });
             document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
+            alert("✅ Narasi Laporan Berhasil Dibuat!");
         } catch (e) { alert("Error: " + e.message); } 
         finally { btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; btn.disabled = false; }
     }

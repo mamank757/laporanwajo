@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Laporan PPL Wajo - King Mamank</title>
+    <title>Sistem Laporan PPL Sulsel - King Mamank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -22,7 +22,7 @@
         .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; }
         
         /* Pengaturan Tabel - Optimasi Kolom */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 5.5pt; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 6pt; table-layout: fixed; }
         th, td { 
             border: 1px solid black; 
             padding: 6px 4px; 
@@ -49,8 +49,26 @@
         input, select { width: 100%; background: #0f172a; border: 1px solid #475569; color: white; padding: 8px; border-radius: 6px; margin-top: 8px; }
         .hidden-input { display: none; }
 
-        .sig-container { display: inline-block; min-width: 250px; text-align: center; }
+  /* Container dibuat relative agar posisi absolute gambar mengacu ke sini */
+.sig-container { 
+    display: inline-block; 
+    min-width: 250px; 
+    text-align: center; 
+    position: relative; /* Penting! */
+    margin-top: 10px;
+}
 
+.img-ttd { 
+    position: absolute; /* Membuat gambar bisa melayang di atas teks */
+    left: 50%;
+    bottom: -5px; /* Jarak dari bawah (atur agar menyentuh nama) */
+    transform: translateX(-50%); /* Agar posisi horizontal tepat di tengah */
+    max-height: 120px; /* Ukuran diperbesar dari 80px ke 120px */
+    width: auto;
+    z-index: 10; /* Memastikan gambar berada di lapisan paling atas */
+    pointer-events: none; /* Agar tidak mengganggu klik pada teks jika perlu */
+    mix-blend-mode: multiply; /* Membuat background putih pada TTD jadi transparan */
+}
         @media print {
             @page { size: A4; margin: 0; }
             .no-print { display: none !important; }
@@ -94,7 +112,7 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> PPL WAJO REPORT GENERATOR - 16 POIN IKI
+            <i class="fa-solid fa-file-invoice"></i> PPL REPORT GENERATOR - 16 POIN IKI
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -130,8 +148,11 @@
                     <option value="NOVEMBER">November</option>
                     <option value="DESEMBER">Desember</option>
                 </select>
-                <label class="text-xs font-bold text-slate-400 uppercase -mb-2">Tanggal Laporan (TTD)</label>
+               <label class="text-xs font-bold text-slate-400 uppercase -mb-2">Tanggal Laporan (TTD)</label>
                 <input type="date" id="in_tanggal" oninput="sync()">
+
+                <label class="text-xs font-bold text-emerald-400 uppercase -mb-2 mt-2">Upload Tanda Tangan (PNG)</label>
+                <input type="file" id="in_ttd" accept="image/*" onchange="handleTTD(this)" class="text-xs file:bg-emerald-600 file:border-none file:text-white file:rounded file:px-2 file:py-1">
                 
                 <button onclick="generateAI()" id="btn-ai" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold text-white shadow-lg transition transform hover:scale-105">
                     🚀 GENERATE AI - NARASI LAPORAN
@@ -155,7 +176,7 @@
             <h1 class="text-2xl font-bold mb-2">LAPORAN KINERJA INDIVIDU</h1>
             <h2 class="text-lg font-bold px-10 leading-snug">Pelaksanaan Tugas Pendampingan Program Utama <br> Kementerian Pertanian</h2>
         </div>
-        <div class="w-full space-y-6">
+        <div class="w-full space-y-6 uppercase">
             <h3 class="font-bold text-xl" id="out_bulan_cover">BULAN JANUARI</h3>
             <p class="text-lg" id="out_jabatan_cover">PENYULUH PERTANIAN</p>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Kementerian_Pertanian_Republik_Indonesia.svg/3840px-Logo_Kementerian_Pertanian_Republik_Indonesia.svg.png" class="w-48 mx-auto my-6">
@@ -171,13 +192,15 @@
         <div class="font-bold mt-10"><p>KEMENTERIAN PERTANIAN</p><p>BADAN PENYULUHAN DAN PENGEMBANGAN SDM PERTANIAN</p><p>PUSAT PENYULUHAN PERTANIAN</p><p class="mt-4">2026</p></div>
     </div>
 
-    <div class="page">
+     <div class="page">
         <h2 class="text-center font-bold text-lg mb-10">KATA PENGANTAR</h2>
         <div id="out_kp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Klik Generate...</div>
         <div class="mt-16 flex justify-end">
             <div class="sig-container">
                 <span id="out_lokasi_tgl1">..., ...</span><br>Penyusun,
-                <div class="h-24"></div>
+                <div class="h-24 flex items-center justify-center">
+                    <img id="out_ttd_img1" src="" class="img-ttd hidden">
+                </div>
                 <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig1"></p>
             </div>
         </div>
@@ -221,7 +244,7 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 34px;">No</th>
+                   <th style="width: 34px;">No</th>
                     <th style="width: 19%;">Komponen Kegiatan</th>
                     <th style="width: 28%;">Rincian Capaian & Eviden</th>
                     <th style="width: 20%;">Kendala</th>
@@ -241,11 +264,15 @@
         <div class="flex justify-end">
             <div class="sig-container">
                 <span id="out_lokasi_tgl2">..., ...</span><br>Penyuluh Pertanian,
-                <div class="h-28"></div>
-                <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig2"></p><br>
-                NIP. <span id="out_nip_sig2">-</span>
-            </div>
+                <div class="h-24 relative flex items-center justify-center">
+            <img id="out_ttd_img2" src="" class="img-ttd hidden">
         </div>
+        
+        <p class="font-bold uppercase inline-block border-b border-black" id="out_nama_sig2" style="position: relative; z-index: 5;"></p>
+        <br>
+        NIP. <span id="out_nip_sig2">-</span>
+    </div>
+</div>
         <div class="page-number">3</div>
     </div>
 </div>
@@ -285,7 +312,7 @@
                 <div class="input-card" id="card_${no}">
                     <div class="flex items-start gap-3 mb-2">
                         <input type="checkbox" id="chk_${no}" onchange="toggle(${no})" class="w-5 h-5 mt-1">
-                        <label for="chk_${no}" class="font-normal text-sm text-slate-200 cursor-pointer">${no}. ${k}</label>
+                        <label for="chk_${no}" class="font-bold text-sm text-slate-200 cursor-pointer">${no}. ${k}</label>
                     </div>
                     <div id="box_${no}" class="hidden-input space-y-2">
                         <textarea id="key_${no}" placeholder="Detail aktivitas, objek/komoditi diperjelas: Cth. Monitoring luas tambah tanam padi Poktan Sukamaju"></textarea>
@@ -298,6 +325,20 @@
         sync();
     }
 
+  function handleTTD(input) {
+        const img1 = document.getElementById('out_ttd_img1');
+        const img2 = document.getElementById('out_ttd_img2');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                img1.src = e.target.result;
+                img2.src = e.target.result;
+                img1.classList.remove('hidden');
+                img2.classList.remove('hidden');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
     function toggle(no) {
         const is = document.getElementById(`chk_${no}`).checked;
         document.getElementById(`box_${no}`).style.display = is ? 'block' : 'none';
@@ -312,7 +353,7 @@
         daftarKomponen.forEach((k, i) => {
             const no = i + 1;
             if(document.getElementById(`chk_${no}`).checked) {
-                tb.innerHTML += `<tr><td align="center">${c++}</td><td class="font-normal">${k}</td><td id="r_${no}">...</td><td id="k_${no}" align="center">-</td><td id="t_${no}" align="center">-</td></tr>`;
+                tb.innerHTML += `<tr><td align="center">${c++}</td><td class="font-bold">${k}</td><td id="r_${no}">...</td><td id="k_${no}" align="center">-</td><td id="t_${no}" align="center">-</td></tr>`;
             }
         });
     }
@@ -336,7 +377,7 @@ window.onload = () => {
     init();
     checkFirstVisit();
 };
-    function sync() {
+   function sync() {
     const val = (id) => document.getElementById(id).value;
     
     // Ambil nilai dasar

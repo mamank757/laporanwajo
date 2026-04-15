@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan SKP Bulanan PPL Wajo - King Mamank</title>
+    <title>Form Laporan Bulanan PPL Wajo - King Mamank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -24,13 +24,13 @@
     box-shadow: 0 0 40px rgba(0,0,0,0.5); 
     position: relative;
     box-sizing: border-box; 
-    overflow: hidden;
+    overflow: visible;
 }
 
         .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; }
         
         /* Pengaturan Tabel - Optimasi Kolom */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 6pt; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 7pt; table-layout: fixed; }
         th, td { 
             border: 1px solid black; 
             padding: 6px 4px; 
@@ -78,21 +78,55 @@
     mix-blend-mode: multiply; /* Membuat background putih pada TTD jadi transparan */
 }
        @media print {
-    @page { 
-        size: 215mm 330mm; /* Ukuran presisi F4 */
-        margin: 0; 
-    }
-    .no-print { display: none !important; }
-    body { background: white; padding: 0; }
-    .page { 
-        margin: 0; 
-        box-shadow: none; 
-        width: 215mm; 
-        height: 330mm; 
-        page-break-after: always; 
-    }
-}
+        @page { 
+            size: 215mm 330mm; /* Ukuran F4 */
+            margin: 0; 
+        }
+        
+        body { background: white; padding: 0; margin: 0; }
+        .no-print { display: none !important; }
 
+        .page { 
+            margin: 0 !important; 
+            box-shadow: none; 
+            width: 215mm; 
+            height: 330mm; /* Kunci tinggi agar nomor halaman statis di bawah */
+            padding: 20mm 20mm; /* Margin isi laporan */
+            page-break-after: always;
+            position: relative;
+            box-sizing: border-box;
+            display: block;
+            color: black;
+        }
+
+        /* KHUSUS UNTUK BAB II PEMBAHASAN (TABEL MELUAP) */
+        .page.auto-height {
+            height: auto !important; /* Izinkan memanjang jika tabel meluap */
+            min-height: 330mm;
+            padding-bottom: 30mm !important; /* Beri ruang agar tidak menabrak nomor halaman */
+        }
+
+        table { 
+            page-break-inside: auto; 
+            width: 100% !important;
+        }
+        
+        tr { 
+            page-break-inside: avoid; 
+            page-break-after: auto; 
+        }
+        
+        thead { 
+            display: table-header-group; /* Header tabel muncul di tiap halaman baru */
+        }
+
+        .page-number { 
+            position: absolute; 
+            bottom: 10mm; 
+            left: 50%; 
+            transform: translateX(-50%); 
+        }
+    }
         .report-container { width: 100%; max-width: 80rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding: 0 1rem; }
 
         @media screen and (max-width: 1024px) { .page { transform: scale(0.85); transform-origin: top center; margin-bottom: -50px; } }
@@ -117,7 +151,7 @@
             <p><b>Generating</b> Form SKP Bulanan dari <b>Mamank.</b> Follow TikTok sy: <b>King Mamank</b>.</p>
             <p class="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/30 text-sm md:text-base text-emerald-50 text-left">
                 <i class="fa-solid fa-robot mr-2 text-emerald-400"></i> 
-                <b class="text-white"></b> Utk hasil cetak laporan yg optimal, gunakan <b>HP Android</b> atau <b>Laptop</b> dgn browser <b>Google Chrome.</b> Jika Generating AI</b> gagal krn trafik padat. Coba lagi beberapa saat, <b>jangan</b> <i>refresh</i> halaman.
+                <b class="text-white"></b> Utk hasil cetak laporan yg optimal, gunakan <b>HP Android</b> atau <b>Laptop</b> dgn browser <b>Google Chrome.</b> <b>Jika Generating AI</b> gagal krn trafik padat. Coba lagi beberapa saat, <b>jangan</b> <i>refresh</i> halaman.
             </p>
         </div>
 
@@ -129,7 +163,7 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> PPL FORM SKP Bulanan GENERATOR - 16 POIN IKI
+            <i class="fa-solid fa-file-invoice"></i> FORM SKP Bulanan PPL WAJO GENERATOR - 16 POIN IKI
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -255,23 +289,25 @@
         <div class="page-number">1</div>
     </div>
 
-    <div class="page">
-        <h2 class="font-bold text-lg mb-2 uppercase text-center">BAB II. PEMBAHASAN</h2>
-        <p class="font-bold mb-4">Rincian Capaian Kinerja Bulan <span id="out_bulan_2">JANUARI</span> 2026</p>
-        <table>
-            <thead>
-                <tr>
-                   <th style="width: 34px;">No</th>
-                    <th style="width: 19%;">Komponen Kegiatan</th>
-                    <th style="width: 28%;">Rincian Capaian & Eviden</th>
-                    <th style="width: 20%;">Kendala</th>
-                    <th style="width: 29%;">Tindak Lanjut</th>
-                </tr>
-            </thead>
-            <tbody id="out_table_body"></tbody>
-        </table>
-        <div class="page-number">2</div>
-    </div>
+    <div class="page auto-height">
+    <h2 class="font-bold text-lg mb-2 uppercase text-center">BAB II. PEMBAHASAN</h2>
+    <p class="font-bold mb-4">Rincian Capaian Kinerja Bulan <span id="out_bulan_2">JANUARI</span> 2026</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 34px;">No</th>
+                <th style="width: 19%;">Komponen Kegiatan</th>
+                <th style="width: 28%;">Rincian Capaian & Eviden</th>
+                <th style="width: 20%;">Kendala</th>
+                <th style="width: 29%;">Tindak Lanjut</th>
+            </tr>
+        </thead>
+        <tbody id="out_table_body">
+            </tbody>
+    </table>
+    <div class="page-number">2</div>
+</div>
 
     <div class="page flex flex-col justify-between">
         <div>
@@ -377,18 +413,20 @@
 // Fungsi untuk menutup peringatan
 function closeWarning() {
     document.getElementById('browser-warning').style.display = 'none';
-    // Opsional: Simpan ke localStorage agar tidak muncul lagi setelah refresh
     localStorage.setItem('warningSeen', 'true');
 }
 
 // Tambahkan pengecekan ini di dalam fungsi init() atau window.onload
 function checkFirstVisit() {
+    // Jika ingin dialog SELALU muncul setiap refresh, hapus/komentari baris di bawah ini
     const hasSeen = localStorage.getItem('warningSeen');
-    if (hasSeen) {
+    if (hasSeen === 'true') {
         document.getElementById('browser-warning').style.display = 'none';
+    } else {
+        // Pastikan dialog tampil jika belum pernah dilihat
+        document.getElementById('browser-warning').style.display = 'flex';
     }
 }
-
 // Update window.onload Anda menjadi:
 window.onload = () => {
     init();
@@ -427,94 +465,102 @@ window.onload = () => {
     document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tglTeks}`;
     document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tglTeks}`;
 }
-    async function generateAI() {
-        const apiKey = "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"; 
-        const btn = document.getElementById('btn-ai');
-        let sel = [];
-        
-        daftarKomponen.forEach((k, i) => {
-            const no = i + 1;
-            if(document.getElementById(`chk_${no}`).checked) {
-                sel.push({ 
-                    no, 
-                    nama: k, 
-                    detail: document.getElementById(`key_${no}`).value, 
-                    user_kendala: document.getElementById(`ken_${no}`).value, 
-                    link: document.getElementById(`ev_${no}`).value 
-                });
-            }
-        });
+   async function generateAI() {
+    // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzoJuE7kGFJ118rJzSflNyJXVqFHxqqvKSS0CLvkH56owVd98DdT89uZcIBJBH4hSye/exec"; 
+    const btn = document.getElementById('btn-ai');
+    let sel = [];
+    
+    daftarKomponen.forEach((k, i) => {
+        const no = i + 1;
+        if(document.getElementById(`chk_${no}`).checked) {
+            sel.push({ 
+                no, 
+                nama: k, 
+                detail: document.getElementById(`key_${no}`).value, 
+                user_kendala: document.getElementById(`ken_${no}`).value, 
+                link: document.getElementById(`ev_${no}`).value 
+            });
+        }
+    });
 
-        if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
-        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing..."; 
-        btn.disabled = true;
+    if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
+    
+    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Processing via Gemini..."; 
+    btn.disabled = true;
 
-        try {
-            const prompt = `Anda adalah PPL Pertanian Profesional. Tugas Anda: Menyusun laporan bulanan formal standar Kementerian Pertanian. 
-
-Data Utama: ${JSON.stringify(sel)}
+   // Prompt yang disesuaikan untuk narasi profesional tanpa subjek personal
+const promptText = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun narasi laporan bulanan formal standar Kementan yang bersifat objektif.
+Data: ${JSON.stringify(sel)}
 Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}.
 Periode: ${document.getElementById('in_bulan').value} 2026.
 
-Aturan Penulisan:
-1. Bahasa: Gunakan Bahasa Indonesia formal, teknis, dan objektif.
-2. 'kp' (Kata Pengantar):
-- Wajib terdiri dari 3 paragraf TERPISAH (dipisahkan dengan newline \n\n).
-- Paragraf 1 (Pembuka):
-  Berisi rasa syukur kepada Tuhan Yang Maha Esa, serta penjelasan umum tentang pentingnya laporan kinerja penyuluh pertanian dalam mendukung program Kementerian Pertanian.
-- Paragraf 2 (Isi):
-  Menjelaskan secara ringkas kegiatan yang dilaksanakan berdasarkan data, mencakup pendampingan, capaian, serta peran penyuluh dalam meningkatkan produktivitas dan kesejahteraan petani.
-- Paragraf 3 (Penutup):
-  Berisi harapan, evaluasi umum, serta ucapan terima kasih kepada pihak terkait (petani, pemerintah, dll).
-- Gunakan bahasa formal, panjang, dan naratif (bukan poin-poin).
-- Hindari kalimat terlalu singkat.
-- Gunakan variasi kalimat agar terlihat profesional seperti laporan resmi pemerintah.
-3. 'latar', 'tugas', 'tujuan': Harus mencerminkan kondisi pertanian wilayah setempat dan tupoksi Penyuluh Pertanian sesuai PERMENPAN (perencanaan, pelaksanaan, evaluasi, dan pengembangan metode penyuluhan).
-4. 'items': Iterasi seluruh data. 'rincian' maksimal 1 kalimat efektif. Jika 'user_kendala' kosong/null, buat kendala teknis lapangan yang relevan secara logis. 'tindak' harus berupa solusi profesional dengan maksimal 2 kalimat efektif.
-5. 'kesimp' (Kesimpulan):
-- Wajib terdiri dari 2 paragraf TERPISAH.
-- Gunakan bahasa Indonesia formal, baku, dan naratif seperti laporan resmi pemerintah.
+ATURAN NARASI (WAJIB):
+1. JANGAN menggunakan kata ganti orang seperti "Saya", "Kami", atau menyebut nama penyuluh di dalam isi laporan.
+2. Gunakan kalimat pasif formal atau sudut pandang penulis (Contoh: "Telah dilaksanakan...", "Kegiatan difokuskan pada...", "Berdasarkan hasil pemantauan...").
+3. 'kp' (Kata Pengantar): Harus 3 paragraf narasi formal tentang rasa syukur dan pentingnya laporan kinerja ini.
+4. 'latar', 'tugas', 'tujuan': Harus mencerminkan tupoksi PPL sesuai PermenPANRB Nomor 35 Tahun 2020 (perencanaan, pelaksanaan, dan evaluasi, serta pengembangan penyuluhan pertanian).
+5. 'items': Iterasi data. 'rincian' & 'tindak' maksimal 2-3 kalimat efektif per item.
+6. 'kesimp': Harus 3 paragraf narasi yang merangkum keberhasilan program dan strategi evaluasi ke depan.
 
-Struktur isi:
-- Paragraf 1 (Pencapaian):
-  Menjelaskan secara umum capaian kinerja penyuluh berdasarkan kegiatan yang telah dilaksanakan, termasuk kontribusi terhadap peningkatan produksi, pendampingan petani, dan dukungan terhadap program Kementerian Pertanian.
-
-- Paragraf 2 (Evaluasi Kendala):
-  Menguraikan kendala yang dihadapi di lapangan (teknis, cuaca, sarana prasarana, partisipasi petani, dll) serta dampaknya terhadap pelaksanaan kegiatan, strategi ke depan, serta harapan terhadap dukungan pemerintah,
-
-PENTING: Output wajib JSON murni tanpa teks pengantar apapun di luar bracket:
+Output WAJIB JSON murni tanpa teks pengantar atau markdown:
 {"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":1, "rincian":"", "kendala":"", "tindak":""}]}`;
+    
+try {
+        // HANYA GUNAKAN SATU FETCH (Tanpa no-cors agar response bisa dibaca)
+        const response = await fetch(webAppUrl, {
+            method: "POST",
+            body: JSON.stringify({ prompt: promptText })
+        });
+        
+        // Cek jika koneksi ke Apps Script berhasil
+        if (!response.ok) throw new Error("Gagal terhubung ke Web App");
 
+        const result = await response.json();
+        
+        // Validasi apakah ada jawaban dari model
+        if (!result.candidates || !result.candidates[0]) {
+            throw new Error("Model AI tidak memberikan jawaban. Cek API Key atau Kuota.");
+        }
 
-            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" } })
-            });
-            const data = await res.json();
-            const obj = JSON.parse(data.choices[0].message.content);
+        // Parsing hasil dari Google Generative AI (Gemma 3)
+        let rawContent = result.candidates[0].content.parts[0].text;
+        
+        // Bersihkan markdown jika model memberikan format ```json ... ```
+        rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
+        
+        const obj = JSON.parse(rawContent);
 
-            document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
-            document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
-            document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
-            document.getElementById('out_tujuan').innerHTML = obj.tujuan.replace(/\n/g, '<br>');
-            document.getElementById('out_kesimp').innerHTML = obj.kesimp.replace(/\n/g, '<br>');
+        // --- UPDATE UI ---
+        document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
+        document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
+        document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
+        document.getElementById('out_tujuan').innerHTML = obj.tujuan.replace(/\n/g, '<br>');
+        document.getElementById('out_kesimp').innerHTML = obj.kesimp.replace(/\n/g, '<br>');
 
-            obj.items.forEach(item => {
-                const rCell = document.getElementById(`r_${item.no}`);
-                const orig = sel.find(s => s.no == item.no);
-                if(rCell) {
-                    rCell.innerHTML = `<div><b>${item.rincian}</b></div>${orig.link ? `<div style="font-size:7pt; color:blue; margin-top:5px; border-top: 0.5px solid #eee;">Eviden: ${orig.link}</div>` : ""}`;
-                    document.getElementById(`k_${item.no}`).innerText = orig.user_kendala || item.kendala;
-                    document.getElementById(`t_${item.no}`).innerText = item.tindak;
-                }
-            });
-            document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
-            alert("✅ Narasi Laporan Berhasil Dibuat!");
-        } catch (e) { alert("Error: " + e.message); } 
-        finally { btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; btn.disabled = false; }
+        obj.items.forEach(item => {
+            const rCell = document.getElementById(`r_${item.no}`);
+            const orig = sel.find(s => s.no == item.no);
+            if(rCell) {
+                rCell.innerHTML = `<div><b>${item.rincian}</b></div>${orig.link ? `<div style="font-size:7pt; color:blue; margin-top:5px; border-top: 0.5px solid #eee;">Eviden: ${orig.link}</div>` : ""}`;
+                document.getElementById(`k_${item.no}`).innerText = orig.user_kendala || item.kendala;
+                document.getElementById(`t_${item.no}`).innerText = item.tindak;
+            }
+        });
+
+        // Hapus style placeholder (warna abu-abu & miring)
+        document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
+        
+        alert("✅ Laporan Berhasil Disusun via Gemma 3!");
+
+    } catch (e) { 
+        console.error(e);
+        alert("Terjadi Kesalahan: " + e.message); 
+    } finally { 
+        btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; 
+        btn.disabled = false; 
     }
-    window.onload = init;
-</script>
+}
+  </script>
 </body>
 </html>

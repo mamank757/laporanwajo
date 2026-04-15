@@ -412,20 +412,14 @@
     }
 // Fungsi untuk menutup peringatan
 function closeWarning() {
+    // Hanya menutup secara visual saja
     document.getElementById('browser-warning').style.display = 'none';
-    localStorage.setItem('warningSeen', 'true');
 }
 
 // Tambahkan pengecekan ini di dalam fungsi init() atau window.onload
 function checkFirstVisit() {
-    // Jika ingin dialog SELALU muncul setiap refresh, hapus/komentari baris di bawah ini
-    const hasSeen = localStorage.getItem('warningSeen');
-    if (hasSeen === 'true') {
-        document.getElementById('browser-warning').style.display = 'none';
-    } else {
-        // Pastikan dialog tampil jika belum pernah dilihat
-        document.getElementById('browser-warning').style.display = 'flex';
-    }
+    // Kita paksa dialog untuk selalu muncul setiap halaman dimuat
+    document.getElementById('browser-warning').style.display = 'flex';
 }
 // Update window.onload Anda menjadi:
 window.onload = () => {

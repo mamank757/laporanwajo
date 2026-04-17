@@ -77,56 +77,53 @@
     pointer-events: none; /* Agar tidak mengganggu klik pada teks jika perlu */
     mix-blend-mode: multiply; /* Membuat background putih pada TTD jadi transparan */
 }
-       @media print {
-        @page { 
-            size: 215mm 330mm; /* Ukuran F4 */
-            margin: 0; 
-        }
-        
-        body { background: white; padding: 0; margin: 0; }
-        .no-print { display: none !important; }
-
-        .page { 
-            margin: 0 !important; 
-            box-shadow: none; 
-            width: 215mm; 
-            height: 330mm; /* Kunci tinggi agar nomor halaman statis di bawah */
-            padding: 20mm 20mm; /* Margin isi laporan */
-            page-break-after: always;
-            position: relative;
-            box-sizing: border-box;
-            display: block;
-            color: black;
-        }
-
-        /* KHUSUS UNTUK BAB II PEMBAHASAN (TABEL MELUAP) */
-        .page.auto-height {
-            height: auto !important; /* Izinkan memanjang jika tabel meluap */
-            min-height: 330mm;
-            padding-bottom: 30mm !important; /* Beri ruang agar tidak menabrak nomor halaman */
-        }
-
-        table { 
-            page-break-inside: auto; 
-            width: 100% !important;
-        }
-        
-        tr { 
-            page-break-inside: avoid; 
-            page-break-after: auto; 
-        }
-        
-        thead { 
-            display: table-header-group; /* Header tabel muncul di tiap halaman baru */
-        }
-
-        .page-number { 
-            position: absolute; 
-            bottom: 10mm; 
-            left: 50%; 
-            transform: translateX(-50%); 
-        }
+     @media print {
+    @page { 
+        size: 215mm 330mm; /* Kertas F4 */
+        margin: 0; 
     }
+    
+    body { background: white; padding: 0; margin: 0; }
+    .no-print { display: none !important; }
+
+    .page { 
+        margin: 0 !important; 
+        box-shadow: none; 
+        width: 215mm; 
+        height: 330mm; 
+        padding: 25mm 20mm 20mm 20mm; /* Margin: Atas 25mm agar tidak mepet, Samping 20mm */
+        page-break-after: always;
+        position: relative;
+        display: block;
+        color: black;
+    }
+
+    /* Kunci agar Bab II bisa meluap ke halaman baru */
+    .page.auto-height {
+        height: auto !important; 
+        min-height: 330mm;
+    }
+
+    table { 
+        page-break-inside: auto; 
+        width: 100% !important;
+    }
+    
+    tr { 
+        page-break-inside: avoid; /* Baris tabel tidak akan terpotong di tengah */
+    }
+    
+   thead { 
+        display: table-header-group; 
+    }
+
+    .page-number { 
+        position: absolute; 
+        bottom: 10mm; 
+        left: 50%; 
+        transform: translateX(-50%); 
+    }
+}
         .report-container { width: 100%; max-width: 80rem; margin: 0 auto; display: flex; flex-direction: column; align-items: center; padding: 0 1rem; }
 
         @media screen and (max-width: 1024px) { .page { transform: scale(0.85); transform-origin: top center; margin-bottom: -50px; } }
@@ -350,6 +347,45 @@
         "Jumlah Laporan Data Statistik Perkebunan"
     ];
 
+function applySmartBreak() {
+    const container = document.querySelector('.report-container');
+    const tableBody = document.getElementById('out_table_body');
+    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    const page2 = document.querySelector('.page.auto-height'); // Bab II
+    
+    // Bersihkan sisa potongan halaman sebelumnya agar tidak tumpang tindih
+    document.querySelectorAll('.page-extra').forEach(p => p.remove());
+
+    const maxHeight = 950; // Batas tinggi aman (pixel) untuk kertas F4
+    let currentHeight = 0;
+    let currentTableBody = tableBody;
+
+    rows.forEach((row) => {
+        // Ambil tinggi baris saat ini
+        const rowHeight = row.offsetHeight || 50; 
+
+        if (currentHeight + rowHeight > maxHeight) {
+            // BUAT HALAMAN LANJUTAN
+            const newPage = document.createElement('div');
+            newPage.className = "page auto-height page-extra";
+            newPage.innerHTML = `
+                <p class="font-bold mb-4 italic text-sm text-gray-500">Lanjutan Rincian Capaian Kinerja</p>
+                <table>
+                    <thead>${page2.querySelector('thead').innerHTML}</thead>
+                    <tbody></tbody>
+                </table>
+                <div class="page-number">2</div>`;
+            
+            // Masukkan halaman baru tepat sebelum Bab III (Kesimpulan)
+            container.insertBefore(newPage, container.lastElementChild);
+            currentTableBody = newPage.querySelector('tbody');
+            currentHeight = 0;
+        }
+        
+        currentTableBody.appendChild(row);
+        currentHeight += row.offsetHeight;
+    });
+}
     function formatTanggalIndo(dateString) {
         if (!dateString) return "...";
         const date = new Date(dateString);
@@ -545,7 +581,11 @@ try {
         // Hapus style placeholder (warna abu-abu & miring)
         document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
         
-        alert("✅ Laporan Berhasil Disusun via Gemma 3!");
+        alert("✅ Laporan Berhasil Disusun oleh AI!");
+        // Letakkan di dalam try block, setelah data AI masuk ke tabel
+setTimeout(() => {
+    applySmartBreak();
+}, 800);
 
     } catch (e) { 
         console.error(e);

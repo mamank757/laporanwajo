@@ -554,39 +554,7 @@ window.onload = () => {
     init();
     checkFirstVisit();
 };
-   function sync() {
-    const val = (id) => document.getElementById(id).value;
-    
-    // Ambil nilai dasar
-    const n = val('in_nama'); 
-    const nip = val('in_nip'); 
-    const b = val('in_bpp'); 
-    let blRaw = val('in_bulan'); // Ini yang "JANUARI"
-    
-    // Proses mengubah "JANUARI" -> "Januari"
-    const blRapi = blRaw.charAt(0).toUpperCase() + blRaw.slice(1).toLowerCase();
-
-    // 1. Update Cover (Tetap UPPERCASE untuk estetika judul)
-    document.getElementById('out_nama_cover').innerText = n;
-    document.getElementById('out_nip_cover').innerText = nip;
-    document.getElementById('out_jabatan_cover').innerText = val('in_jabatan').toUpperCase();
-    document.getElementById('out_wkpp_cover').innerText = val('in_wkpp').toUpperCase();
-    document.getElementById('out_bpp_cover').innerText = b.toUpperCase();
-    document.getElementById('out_bulan_cover').innerText = `BULAN ${blRaw}`; // Tetap JANUARI
-    
-    // 2. Update Tanda Tangan
-    document.getElementById('out_nama_sig1').innerText = n;
-    document.getElementById('out_nama_sig2').innerText = n;
-    document.getElementById('out_nip_sig2').innerText = nip;
-    
-    // 3. Update BAB II Pembahasan (Sekarang jadi "Januari")
-    document.getElementById('out_bulan_2').innerText = blRapi; 
-
-    // 4. Update Lokasi & Tanggal TTD
-    const tglTeks = formatTanggalIndo(val('in_tanggal'));
-    document.getElementById('out_lokasi_tgl1').innerText = `${b}, ${tglTeks}`;
-    document.getElementById('out_lokasi_tgl2').innerText = `${b}, ${tglTeks}`;
-}
+  
    async function generateAI() {
     // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwa573I0MtQNxSkZoPQ7l4V6tMRYZmav_-I03K_w6DHJzjAEwX-FP-f4_IfnZ51rfbr/exec"; 

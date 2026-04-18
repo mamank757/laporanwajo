@@ -405,7 +405,7 @@
         
         if (daftarNipTerblokir.includes(val)) {
             btnAi.style.backgroundColor = "#991b1b"; // Merah gelap
-            btnAi.innerHTML = "🚫 AKSES NIP DIBLOKIR";
+            btnAi.innerHTML = "🚫 AKSES DIBLOKIR";
             btnAi.disabled = true;
             nipInput.style.color = "#ef4444";
             nipInput.style.borderColor = "#ef4444";
@@ -589,7 +589,7 @@
         const nipVal = document.getElementById('in_nip').value.trim();
 
         if (daftarNipTerblokir.includes(nipVal)) {
-            alert("Akses AI ditangguhkan untuk NIP ini. Silakan hubungi King Mamank.");
+            alert("🚫 AKSES DIBLOKIR");
             return;
         }
 

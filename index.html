@@ -15,7 +15,7 @@
     background: white; 
     width: 215mm; /* Ubah dari 210mm ke 215mm */
     min-height: 330mm; /* Ubah dari 297mm ke 330mm */
-    padding: 20mm 20mm; 
+    padding: 25mm 20mm 20mm 20mm; 
     margin: 20px auto; 
     color: black;
     font-family: 'Times New Roman', Times, serif; 
@@ -99,7 +99,7 @@
     pointer-events: none; /* Agar tidak mengganggu klik pada teks jika perlu */
     mix-blend-mode: multiply; /* Membuat background putih pada TTD jadi transparan */
 }
-     @media print {
+   @media print {
     @page { 
         size: 215mm 330mm; /* Kertas F4 */
         margin: 0; 
@@ -135,9 +135,10 @@
         page-break-inside: avoid; /* Baris tabel tidak akan terpotong di tengah */
     }
     
-   thead { 
-        display: table-header-group; 
+    thead { 
+        display: table-header-group; /* Header tabel otomatis muncul di lembar lanjutan */
     }
+}
 
     .page-number { 
         position: absolute; 
@@ -477,6 +478,7 @@ function applySmartBreak() {
         currentHeight += row.offsetHeight;
     });
 }
+
     function formatTanggalIndo(dateString) {
         if (!dateString) return "...";
         const date = new Date(dateString);

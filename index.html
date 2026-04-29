@@ -620,21 +620,89 @@
         btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Ai sedang menyusun laporan..."; 
         btn.disabled = true;
 
-        const promptText = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun narasi laporan bulanan formal standar Kementan yang bersifat objektif.
-Data: ${JSON.stringify(sel)}
-Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab: ${document.getElementById('in_kab').value}.
-Periode: ${document.getElementById('in_bulan').value} 2026.
+       const promptText = `Anda adalah Penyuluh Pertanian Lapangan (PPL) profesional yang menyusun laporan bulanan resmi sesuai standar Kementerian Pertanian Republik Indonesia.
 
-ATURAN NARASI (WAJIB):
-1. JANGAN menggunakan kata ganti orang seperti "Saya", "Kami", atau menyebut nama penyuluh di dalam isi laporan.
-2. Gunakan kalimat pasif formal atau sudut pandang penulis (Contoh: "Telah dilaksanakan...", "Kegiatan difokuskan pada...", "Berdasarkan hasil pemantauan...").
-3. 'kp' (Kata Pengantar): Harus 3 paragraf narasi formal tentang rasa syukur dan pentingnya laporan kinerja ini.
-4. 'latar', 'tugas', 'tujuan': Harus mencerminkan tupoksi PPL sesuai PermenPANRB Nomor 35 Tahun 2020 (perencanaan, pelaksanaan, dan evaluasi, serta pengembangan penyuluhan pertanian).
-5. 'items': Iterasi data. 'rincian' & 'tindak' maksimal 2-3 kalimat efektif per item.
-6. 'kesimp': Harus 3 paragraf narasi yang merangkum keberhasilan program dan strategi evaluasi ke depan.
+TUGAS:
+Susun narasi laporan bulanan yang formal, objektif, sistematis, dan sesuai kaidah bahasa Indonesia baku.
 
-Output WAJIB JSON murni tanpa teks pengantar atau markdown:
-{"kp":"", "latar":"", "tugas":"", "tujuan":"", "kesimp":"", "items":[{"no":1, "rincian":"", "kendala":"", "tindak":""}]}`;
+DATA:
+${JSON.stringify(sel)}
+
+LOKASI:
+BPP ${document.getElementById('in_bpp').value}, Kabupaten ${document.getElementById('in_kab').value}
+
+PERIODE:
+${document.getElementById('in_bulan').value} 2026
+
+KETENTUAN UMUM (WAJIB DIPATUHI):
+- Gunakan bahasa Indonesia baku, formal, dan administratif.
+- Gunakan kalimat pasif dan impersonal (tanpa kata "saya", "kami", atau nama individu).
+- Hindari opini subjektif, gunakan gaya laporan berbasis fakta dan hasil kegiatan.
+- Gunakan variasi kalimat agar tidak repetitif.
+- Setiap bagian minimal memiliki kedalaman narasi (tidak terlalu singkat).
+- Pastikan seluruh output VALID JSON tanpa teks tambahan.
+
+STRUKTUR DAN ATURAN ISI:
+
+1. "kp" (Kata Pengantar):
+- Terdiri dari TEPAT 3 paragraf.
+- Paragraf 1: Ungkapan syukur dan gambaran umum pelaksanaan kegiatan.
+- Paragraf 2: Pentingnya laporan sebagai bentuk pertanggungjawaban kinerja.
+- Paragraf 3: Harapan terhadap pemanfaatan laporan.
+- Gunakan gaya bahasa resmi instansi pemerintah.
+
+2. "latar":
+- Uraikan latar belakang kegiatan penyuluhan.
+- Kaitkan dengan kondisi wilayah, kebutuhan petani, dan program pembangunan pertanian.
+- Minimal 3 paragraf.
+
+3. "tugas":
+- Jelaskan tugas PPL berdasarkan PermenPANRB Nomor 35 Tahun 2020.
+- Wajib mencakup: perencanaan, pelaksanaan, evaluasi, dan pengembangan penyuluhan.
+- Ditulis dalam bentuk narasi, bukan poin.
+
+4. "tujuan":
+- Jelaskan tujuan kegiatan penyuluhan secara spesifik dan terukur.
+- Kaitkan dengan peningkatan kapasitas petani dan produktivitas.
+- Minimal 1 paragraf padat.
+
+5. "items":
+- Iterasi dari data yang diberikan.
+- Setiap item harus memiliki:
+  - "no": nomor urut
+  - "rincian": uraian kegiatan (2–3 kalimat efektif, jelas, berbasis kegiatan nyata)
+  - "kendala": hambatan yang terjadi (1–2 kalimat)
+  - "tindak": langkah tindak lanjut/solusi (2–3 kalimat)
+- Gunakan bahasa operasional dan konkret.
+
+6. "kesimp":
+- Terdiri dari TEPAT 3 paragraf.
+- Paragraf 1: Ringkasan pelaksanaan kegiatan dan capaian.
+- Paragraf 2: Evaluasi umum termasuk kendala utama.
+- Paragraf 3: Rekomendasi dan strategi perbaikan ke depan.
+
+FORMAT OUTPUT (WAJIB):
+- Hanya JSON valid
+- TANPA markdown
+- TANPA penjelasan tambahan
+- Struktur harus PERSIS seperti berikut:
+
+{
+  "kp": "",
+  "latar": "",
+  "tugas": "",
+  "tujuan": "",
+  "kesimp": "",
+  "items": [
+    {
+      "no": 1,
+      "rincian": "",
+      "kendala": "",
+      "tindak": ""
+    }
+  ]
+}
+`;
         
         try {
             const response = await fetch(webAppUrl, {

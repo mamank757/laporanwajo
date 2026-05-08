@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Laporan Bulanan PPL WAJO - King Mamank</title>
+    <title>Form Laporan Bulanan PPL SULSEL - King Mamank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -203,7 +203,7 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> FORM SKP Bulanan PPL WAJO GENERATOR AI - 16 POIN IKI
+            <i class="fa-solid fa-file-invoice"></i> FORM SKP Bulanan PPL SULSEL GENERATOR AI - 16 POIN IKI
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
@@ -639,165 +639,104 @@
         });
     };
 
-    async function generateAI() {
-        const nipVal = document.getElementById('in_nip').value.trim();
+async function generateAI() {
+    const nipVal = document.getElementById('in_nip').value.trim();
+    if (daftarNipTerblokir.includes(nipVal)) return alert("🚫 AKSES DITOLAK");
+    if (!nipVal) return alert("Silakan masukkan NIP terlebih dahulu!");
 
-        if (daftarNipTerblokir.includes(nipVal)) {
-            alert("🚫 AKSES ANDA DITOLAK");
-            return;
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbynBcYZgJmrnvw0aUjHg_w1C1l3jRScGIfIoUXRDICq4HFYMtmKxRgc1Se_uoO-GmI/exec"; 
+    const btn = document.getElementById('btn-ai');
+    let sel = [];
+    
+    daftarKomponen.forEach((k, i) => {
+        const no = i + 1;
+        if(document.getElementById(`chk_${no}`).checked) {
+            sel.push({ 
+                no, 
+                komponen: k, 
+                detail: document.getElementById(`key_${no}`).value, 
+                kendala: document.getElementById(`ken_${no}`).value 
+            });
         }
+    });
 
-        if (!nipVal) {
-            alert("Silakan masukkan NIP terlebih dahulu!");
-            return;
-        }
+    if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
+    
+    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI Sedang Menyusun Laporan..."; 
+    btn.disabled = true;
 
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbwa573I0MtQNxSkZoPQ7l4V6tMRYZmav_-I03K_w6DHJzjAEwX-FP-f4_IfnZ51rfbr/exec"; 
-        const btn = document.getElementById('btn-ai');
-        let sel = [];
+    // PROMPT YANG LEBIH TEGAS & DISIPLIN
+    const promptText = `Anda adalah PPL profesional. Buat laporan dalam format JSON MURNI.
+Data: ${JSON.stringify(sel)}
+Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab. ${document.getElementById('in_kab').value}
+Periode: ${document.getElementById('in_bulan').value} 2026.
+
+WAJIB mengembalikan JSON dengan key berikut (HURUF KECIL):
+{
+  "kp": "narasi kata pengantar 3 paragraf",
+  "latar": "narasi latar belakang",
+  "tugas": "narasi tugas pokok",
+  "tujuan": "narasi tujuan",
+  "kesimp": "narasi kesimpulan 3 paragraf",
+  "items": [{"no": 1, "rincian": "", "kendala": "", "tindak": ""}]
+}`;
+
+    try {
+        const response = await fetch(webAppUrl, {
+            method: "POST",
+            body: JSON.stringify({ prompt: promptText })
+        });
         
-        daftarKomponen.forEach((k, i) => {
-            const no = i + 1;
-            if(document.getElementById(`chk_${no}`).checked) {
-                sel.push({ 
-                    no, 
-                    nama: k, 
-                    detail: document.getElementById(`key_${no}`).value, 
-                    user_kendala: document.getElementById(`ken_${no}`).value, 
-                    link: document.getElementById(`ev_${no}`).value 
-                });
+        const rawText = await response.text();
+        let obj;
+
+        try {
+            // Trik Sakti: Ambil hanya bagian di dalam kurung kurawal (mengantisipasi teks tambahan AI)
+            const cleanJson = rawText.substring(rawText.indexOf('{'), rawText.lastIndexOf('}') + 1);
+            const parsed = JSON.parse(cleanJson);
+            
+            // AUTO-REPAIR: Pastikan semua key menjadi huruf kecil agar sinkron
+            obj = Object.keys(parsed).reduce((acc, key) => {
+                acc[key.toLowerCase()] = parsed[key];
+                return acc;
+            }, {});
+        } catch (e) {
+            console.error("Format AI rusak:", rawText);
+            throw new Error("AI memberikan format yang salah. Silakan coba lagi.");
+        }
+
+        // VALIDASI KEBERADAAN DATA
+        if (!obj.kp) throw new Error("AI gagal membuat Kata Pengantar. Coba lagi.");
+
+        // UPDATE UI
+        document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
+        document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
+        document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
+        document.getElementById('out_tujuan').innerHTML = obj.tujuan.replace(/\n/g, '<br>');
+        document.getElementById('out_kesimp').innerHTML = obj.kesimp.replace(/\n/g, '<br>');
+
+        // UPDATE TABEL
+        updateTable(); // Refresh tabel kosong dulu
+        obj.items.forEach(item => {
+            const rCell = document.getElementById(`r_${item.no}`);
+            if(rCell) {
+                rCell.innerHTML = `<b>${item.rincian}</b>`;
+                document.getElementById(`k_${item.no}`).innerText = item.kendala || "-";
+                document.getElementById(`t_${item.no}`).innerText = item.tindak || "-";
             }
         });
 
-        if(sel.length === 0) return alert("Pilih minimal satu kegiatan!");
-        
-        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Ai sedang menyusun laporan..."; 
-        btn.disabled = true;
+        document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
+        alert("✅ Laporan Berhasil Disusun!");
+        if (window.applySmartBreak) setTimeout(applySmartBreak, 500);
 
-       const promptText = `Anda adalah Penyuluh Pertanian Lapangan (PPL) profesional yang menyusun laporan bulanan resmi sesuai standar Kementerian Pertanian Republik Indonesia.
-
-TUGAS:
-Susun narasi laporan bulanan yang formal, objektif, sistematis, dan sesuai kaidah bahasa Indonesia baku.
-
-DATA:
-${JSON.stringify(sel)}
-
-LOKASI:
-BPP ${document.getElementById('in_bpp').value}, Kabupaten ${document.getElementById('in_kab').value}
-
-PERIODE:
-${document.getElementById('in_bulan').value} 2026
-
-KETENTUAN UMUM (WAJIB DIPATUHI):
-- Gunakan bahasa Indonesia baku, formal, dan administratif.
-- Gunakan kalimat pasif dan impersonal (tanpa kata "saya", "kami", atau nama individu).
-- Hindari opini subjektif, gunakan gaya laporan berbasis fakta dan hasil kegiatan.
-- Gunakan variasi kalimat agar tidak repetitif.
-- Setiap bagian minimal memiliki kedalaman narasi (tidak terlalu singkat).
-- Pastikan seluruh output VALID JSON tanpa teks tambahan.
-
-STRUKTUR DAN ATURAN ISI:
-
-1. "kp" (Kata Pengantar):
-- Terdiri dari TEPAT 3 paragraf.
-- Paragraf 1: Ungkapan syukur dan gambaran umum pelaksanaan kegiatan.
-- Paragraf 2: Pentingnya laporan sebagai bentuk pertanggungjawaban kinerja.
-- Paragraf 3: Harapan terhadap pemanfaatan laporan.
-- Gunakan gaya bahasa resmi instansi pemerintah.
-
-2. "latar":
-- Uraikan latar belakang kegiatan penyuluhan.
-- Kaitkan dengan kondisi wilayah, kebutuhan petani, dan program pembangunan pertanian.
-- Minimal 3 paragraf.
-
-3. "tugas":
-- Jelaskan tugas PPL berdasarkan PermenPANRB Nomor 35 Tahun 2020.
-- Wajib mencakup: perencanaan, pelaksanaan, evaluasi, dan pengembangan penyuluhan.
-- Ditulis dalam bentuk narasi, bukan poin.
-
-4. "tujuan":
-- Jelaskan tujuan kegiatan penyuluhan secara spesifik dan terukur.
-- Kaitkan dengan peningkatan kapasitas petani dan produktivitas.
-- Minimal 1 paragraf padat.
-
-5. "items":
-- Iterasi dari data yang diberikan.
-- Setiap item harus memiliki:
-  - "no": nomor urut
-  - "rincian": uraian kegiatan (2–3 kalimat efektif, jelas, berbasis kegiatan nyata)
-  - "kendala": hambatan yang terjadi (1–2 kalimat)
-  - "tindak": langkah tindak lanjut/solusi (2–3 kalimat)
-- Gunakan bahasa operasional dan konkret.
-
-6. "kesimp":
-- Terdiri dari TEPAT 3 paragraf.
-- Paragraf 1: Ringkasan pelaksanaan kegiatan dan capaian.
-- Paragraf 2: Evaluasi umum termasuk kendala utama.
-- Paragraf 3: Rekomendasi dan strategi perbaikan ke depan.
-
-FORMAT OUTPUT (WAJIB):
-- Hanya JSON valid
-- TANPA markdown
-- TANPA penjelasan tambahan
-- Struktur harus PERSIS seperti berikut:
-
-{
-  "kp": "",
-  "latar": "",
-  "tugas": "",
-  "tujuan": "",
-  "kesimp": "",
-  "items": [
-    {
-      "no": 1,
-      "rincian": "",
-      "kendala": "",
-      "tindak": ""
+    } catch (e) { 
+        alert("Kesalahan: " + e.message); 
+    } finally { 
+        btn.innerHTML = "🚀 GENERATE AI - NARASI LAPORAN"; 
+        btn.disabled = false; 
     }
-  ]
 }
-`;
-        
-        try {
-            const response = await fetch(webAppUrl, {
-                method: "POST",
-                body: JSON.stringify({ prompt: promptText })
-            });
-            
-            if (!response.ok) throw new Error("Gagal terhubung ke Web App");
-            const result = await response.json();
-            let rawContent = result.candidates[0].content.parts[0].text;
-            rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
-            const obj = JSON.parse(rawContent);
-
-            document.getElementById('out_kp').innerHTML = obj.kp.replace(/\n/g, '<br>');
-            document.getElementById('out_latar').innerHTML = obj.latar.replace(/\n/g, '<br>');
-            document.getElementById('out_tugas_pokok').innerHTML = obj.tugas.replace(/\n/g, '<br>');
-            document.getElementById('out_tujuan').innerHTML = obj.tujuan.replace(/\n/g, '<br>');
-            document.getElementById('out_kesimp').innerHTML = obj.kesimp.replace(/\n/g, '<br>');
-
-            obj.items.forEach(item => {
-                const rCell = document.getElementById(`r_${item.no}`);
-                const orig = sel.find(s => s.no == item.no);
-                if(rCell) {
-                    rCell.innerHTML = `<div><b>${item.rincian}</b></div>${orig.link ? `<div style="font-size:7pt; color:blue;">Eviden: ${orig.link}</div>` : ""}`;
-                    document.getElementById(`k_${item.no}`).innerText = orig.user_kendala || item.kendala;
-                    document.getElementById(`t_${item.no}`).innerText = item.tindak;
-                }
-            });
-
-            document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
-            alert("✅ Laporan Berhasil Disusun!");
-            setTimeout(applySmartBreak, 800);
-
-        } catch (e) { 
-            console.error(e);
-            alert("Kesalahan: " + e.message); 
-        } finally { 
-            btn.innerHTML = "🚀 GENERATE NARASI LAPORAN"; 
-            btn.disabled = false; 
-        }
-    }
 // Fungsi untuk memunculkan Pop-up Ebook (Selalu Muncul)
 function showEbookPopup() {
     const popup = document.getElementById('ebook-popup');

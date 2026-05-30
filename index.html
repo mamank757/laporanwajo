@@ -716,15 +716,32 @@ WAJIB mengembalikan JSON dengan key berikut (HURUF KECIL):
         document.getElementById('out_kesimp').innerHTML = obj.kesimp.replace(/\n/g, '<br>');
 
         // UPDATE TABEL
-        updateTable(); // Refresh tabel kosong dulu
-        obj.items.forEach(item => {
-            const rCell = document.getElementById(`r_${item.no}`);
-            if(rCell) {
-                rCell.innerHTML = `<b>${item.rincian}</b>`;
-                document.getElementById(`k_${item.no}`).innerText = item.kendala || "-";
-                document.getElementById(`t_${item.no}`).innerText = item.tindak || "-";
-            }
-        });
+        // UPDATE TABEL
+updateTable(); // Refresh tabel kosong dulu
+obj.items.forEach(item => {
+    // Toleransi jika AI membalas dengan key huruf besar
+    const rincianVal = item.rincian || item.RINCIAN || "";
+    const kendalaVal = item.kendala || item.KENDALA || "-";
+    const tindakVal = item.tindak || item.TINDAK || "-";
+    const noUrut = item.no || item.NO;
+
+    const rCell = document.getElementById(`r_${noUrut}`);
+    if(rCell) {
+        // 1. Ambil nilai link eviden dari form input
+        const linkEviden = document.getElementById(`ev_${noUrut}`).value.trim();
+        
+        // 2. Gabungkan teks AI dengan link eviden (jika link diisi)
+        let htmlContent = `<b>${rincianVal}</b>`;
+        if (linkEviden !== "") {
+            htmlContent += `<br><br><span class="italic text-blue-700" style="word-break: break-all;"><b>Link Eviden:</b><br>${linkEviden}</span>`;
+        }
+        
+        // 3. Masukkan ke dalam tabel
+        rCell.innerHTML = htmlContent;
+        document.getElementById(`k_${noUrut}`).innerText = kendalaVal;
+        document.getElementById(`t_${noUrut}`).innerText = tindakVal;
+    }
+});
 
         document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400'));
         alert("✅ Laporan Berhasil Disusun!");

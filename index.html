@@ -642,7 +642,7 @@ async function generateAI() {
     if (daftarNipTerblokir.includes(nipVal)) return alert("🚫 AKSES DITOLAK");
     if (!nipVal) return alert("Silakan masukkan NIP terlebih dahulu!");
 
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbynBcYZgJmrnvw0aUjHg_w1C1l3jRScGIfIoUXRDICq4HFYMtmKxRgc1Se_uoO-GmI/exec"; 
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwq8WcYpr4UeCdOxIEOX4MNeOdYpJa3iEUFRyYcqHNEttTDx4OoQ49WUmk5dkbgWzoE/exec"; 
     const btn = document.getElementById('btn-ai');
     let sel = [];
     
@@ -664,21 +664,66 @@ async function generateAI() {
     btn.disabled = true;
 
     // PROMPT YANG LEBIH TEGAS & DISIPLIN
-    const promptText = `Anda adalah PPL profesional. Buat laporan dalam format JSON MURNI.
-Data: ${JSON.stringify(sel)}
-Lokasi: BPP ${document.getElementById('in_bpp').value}, Kab. ${document.getElementById('in_kab').value}
-Periode: ${document.getElementById('in_bulan').value} 2026.
+    // PROMPT YANG LEBIH TEGAS, PANJANG & DISIPLIN EYD
+    const promptText = `Anda adalah Penyuluh Pertanian Lapangan (PPL) profesional yang menyusun laporan bulanan resmi sesuai standar Kementerian Pertanian Republik Indonesia.
 
-WAJIB mengembalikan JSON dengan key berikut (HURUF KECIL):
+TUGAS:
+Susun narasi laporan bulanan yang formal, objektif, sistematis, panjang, dan detail. 
+
+DATA:
+${JSON.stringify(sel)}
+
+LOKASI:
+BPP ${document.getElementById('in_bpp').value}, Kabupaten ${document.getElementById('in_kab').value}
+
+PERIODE:
+${document.getElementById('in_bulan').value} 2026
+
+KETENTUAN UMUM (WAJIB DIPATUHI):
+- WAJIB gunakan Ejaan Yang Disempurnakan (EYD). Awal kalimat dan nama tempat HARUS menggunakan Huruf Kapital. JANGAN gunakan huruf kecil semua!
+- Gunakan bahasa Indonesia baku, formal, dan administratif.
+- PENTING: Untuk memisahkan antar paragraf di dalam teks JSON, WAJIB gunakan karakter '\\n\\n'.
+- Setiap bagian minimal memiliki kedalaman narasi yang panjang (tidak terlalu singkat).
+
+STRUKTUR DAN ATURAN ISI:
+1. "kp" (Kata Pengantar):
+- Terdiri dari TEPAT 3 paragraf. (Wajib pisahkan dengan '\\n\\n')
+- Paragraf 1: Ungkapan syukur dan gambaran umum pelaksanaan kegiatan.
+- Paragraf 2: Pentingnya laporan sebagai bentuk pertanggungjawaban kinerja.
+- Paragraf 3: Harapan terhadap pemanfaatan laporan.
+
+2. "latar":
+- Uraikan latar belakang kegiatan penyuluhan.
+- Kaitkan dengan kondisi wilayah, kebutuhan petani, dan program pemerintah.
+- Minimal 3 paragraf. (Wajib pisahkan dengan '\\n\\n')
+
+3. "tugas":
+- Jelaskan tugas PPL berdasarkan PermenPANRB Nomor 35 Tahun 2020.
+- Ditulis dalam bentuk narasi paragraf panjang, bukan poin.
+
+4. "tujuan":
+- Jelaskan tujuan kegiatan penyuluhan secara spesifik dan terukur (Minimal 1 paragraf padat).
+
+5. "items":
+- Iterasi dari data yang diberikan. Jabarkan dengan bahasa birokrasi.
+- "rincian": uraian kegiatan (2–3 kalimat efektif)
+- "kendala": hambatan yang terjadi (1–2 kalimat)
+- "tindak": langkah tindak lanjut/solusi (2–3 kalimat spesifik sesuai masalah)
+
+6. "kesimp":
+- Terdiri dari TEPAT 3 paragraf. (Wajib pisahkan dengan '\\n\\n')
+- Ringkasan, Evaluasi umum, dan Rekomendasi/strategi perbaikan ke depan.
+
+FORMAT OUTPUT (WAJIB):
+- HANYA JSON valid. Key JSON wajib huruf kecil, TAPI VALUE/ISI TEKS WAJIB MEMATUHI EYD DAN HURUF KAPITAL.
 {
-  "kp": "narasi kata pengantar 3 paragraf",
-  "latar": "narasi latar belakang",
-  "tugas": "narasi tugas pokok",
-  "tujuan": "narasi tujuan",
-  "kesimp": "narasi kesimpulan 3 paragraf",
-  "items": [{"no": 1, "rincian": "", "kendala": "", "tindak": ""}]
+  "kp": "...",
+  "latar": "...",
+  "tugas": "...",
+  "tujuan": "...",
+  "kesimp": "...",
+  "items": [{"no": 1, "rincian": "...", "kendala": "...", "tindak": "..."}]
 }`;
-
     try {
         const response = await fetch(webAppUrl, {
             method: "POST",

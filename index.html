@@ -663,8 +663,7 @@ async function generateAI() {
     btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI Sedang Menyusun Laporan..."; 
     btn.disabled = true;
 
-    // PROMPT YANG LEBIH TEGAS & DISIPLIN
-    // PROMPT YANG LEBIH TEGAS, PANJANG & DISIPLIN EYD
+    // PROMPT DENGAN ATURAN KAPITALISASI YANG NORMAL (SENTENCE CASE)
     const promptText = `Anda adalah Penyuluh Pertanian Lapangan (PPL) profesional yang menyusun laporan bulanan resmi sesuai standar Kementerian Pertanian Republik Indonesia.
 
 TUGAS:
@@ -680,7 +679,7 @@ PERIODE:
 ${document.getElementById('in_bulan').value} 2026
 
 KETENTUAN UMUM (WAJIB DIPATUHI):
-- WAJIB gunakan Ejaan Yang Disempurnakan (EYD). Awal kalimat dan nama tempat HARUS menggunakan Huruf Kapital. JANGAN gunakan huruf kecil semua!
+- TATA TULIS: Gunakan tata tulis "Sentence case". Huruf kapital HANYA digunakan pada huruf pertama di awal kalimat, singkatan resmi, dan nama diri/tempat. DILARANG KERAS mengkapitalisasi setiap kata!
 - Gunakan bahasa Indonesia baku, formal, dan administratif.
 - PENTING: Untuk memisahkan antar paragraf di dalam teks JSON, WAJIB gunakan karakter '\\n\\n'.
 - Setiap bagian minimal memiliki kedalaman narasi yang panjang (tidak terlalu singkat).
@@ -715,7 +714,7 @@ STRUKTUR DAN ATURAN ISI:
 - Ringkasan, Evaluasi umum, dan Rekomendasi/strategi perbaikan ke depan.
 
 FORMAT OUTPUT (WAJIB):
-- HANYA JSON valid. Key JSON wajib huruf kecil, TAPI VALUE/ISI TEKS WAJIB MEMATUHI EYD DAN HURUF KAPITAL.
+- HANYA JSON valid. Key JSON wajib huruf kecil.
 {
   "kp": "...",
   "latar": "...",
